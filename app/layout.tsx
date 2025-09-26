@@ -4,19 +4,19 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Suspense } from "react"
 
-import { Inter, Geist, Geist_Mono, Source_Serif_4 } from "next/font/google"
+import { Inter, Roboto, Roboto_Mono, Source_Serif_4 } from "next/font/google"
 
 // Initialize fonts with proper const assignments
-const geist = Geist({
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+const roboto = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-roboto",
 })
 
-const geistMono = Geist_Mono({
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+const robotoMono = Roboto_Mono({
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-roboto-mono",
 })
 
 const sourceSerif = Source_Serif_4({
@@ -181,7 +181,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geist.variable} ${geistMono.variable} ${sourceSerif.variable} antialiased`}
+      className={`${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable} antialiased`}
     >
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
