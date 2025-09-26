@@ -19,12 +19,12 @@ The application calculates monthly revenue through a multi-step process:
 
 #### Step 1: Occupancy-Based Booking Calculations
 
-```
+\`\`\`
 Days in Month = 30 (standardized)
 Nights Booked = (Days in Month × Occupancy Rate) ÷ 100
 Bookings per Month = Nights Booked ÷ 2 (minimum 2-night stay requirement)
 Average Stay Length = 2 nights (minimum stay policy)
-```
+\`\`\`
 
 **Example:**
 - Occupancy Rate: 65%
@@ -33,11 +33,11 @@ Average Stay Length = 2 nights (minimum stay policy)
 
 #### Step 2: Gross Revenue Calculation
 
-```
+\`\`\`
 Nightly Revenue = Nights Booked × Average Nightly Rate
 Cleaning Fee Revenue = Bookings per Month × Cleaning Fee per Booking
 Gross Monthly Revenue = Nightly Revenue + Cleaning Fee Revenue
-```
+\`\`\`
 
 **Example:**
 - Nightly Revenue = 20 × $200 = $4,000
@@ -46,11 +46,11 @@ Gross Monthly Revenue = Nightly Revenue + Cleaning Fee Revenue
 
 #### Step 3: Net Revenue After Platform Fees
 
-```
+\`\`\`
 Monthly Platform Fees = (Gross Monthly Revenue × Platform Fee Rate) ÷ 100
 Net Monthly Revenue = Gross Monthly Revenue - Monthly Platform Fees
 Annual Revenue = Net Monthly Revenue × 12
-```
+\`\`\`
 
 **Example:**
 - Monthly Platform Fees = ($5,250 × 3) ÷ 100 = $157.50
@@ -59,9 +59,9 @@ Annual Revenue = Net Monthly Revenue × 12
 
 ### Average Daily Rate (ADR)
 
-```
+\`\`\`
 ADR = Total Nightly Revenue ÷ Nights Booked
-```
+\`\`\`
 
 This metric helps compare pricing competitiveness against local hotels and similar STR properties.
 
@@ -80,44 +80,44 @@ The calculator tracks both fixed and variable operating expenses:
 
 #### Variable Expenses (Scale with Occupancy)
 
-```
+\`\`\`
 Actual Cleaning Costs = Bookings per Month × 12 × (Cleaning Fee × 0.6)
-```
+\`\`\`
 
 Note: Assumes cleaning costs are 60% of the cleaning fee charged to guests.
 
 #### Management Fees
 
-```
+\`\`\`
 Management Fee Amount = (Annual Revenue × Management Fee Rate) ÷ 100
-```
+\`\`\`
 
 #### Utilities
 
-```
+\`\`\`
 Annual Utilities = Monthly Utility Cost × 12
-```
+\`\`\`
 
 #### Total Annual Operating Costs
 
-```
+\`\`\`
 Total Annual Operating Costs = Management Fee + Lodging Tax + Property Tax + 
                               Actual Cleaning Costs + Maintenance + Insurance + 
                               Annual Utilities + HOA Fees + Other Expenses + 
                               (Monthly Platform Fees × 12)
-```
+\`\`\`
 
 ### Mortgage Calculations
 The calculator uses the standard mortgage payment formula:
 
-```
+\`\`\`
 Monthly Interest Rate = (Annual Interest Rate ÷ 100) ÷ 12
 Number of Payments = Loan Term in Years × 12
 Loan Amount = Purchase Price - Down Payment
 
 Monthly Mortgage Payment = [Loan Amount × Monthly Interest Rate × (1 + Monthly Interest Rate)^Number of Payments] ÷ 
                           [(1 + Monthly Interest Rate)^Number of Payments - 1]
-```
+\`\`\`
 
 **Example:**
 - Purchase Price: $300,000
@@ -133,17 +133,17 @@ Monthly Mortgage Payment = [Loan Amount × Monthly Interest Rate × (1 + Monthly
 
 ### Net Operating Income (NOI)
 
-```
+\`\`\`
 NOI = Annual Revenue - Total Annual Operating Costs
-```
+\`\`\`
 
 Note: Excludes mortgage payments and depreciation.
 
 ### Capitalization Rate (Cap Rate)
 
-```
+\`\`\`
 Cap Rate = (NOI ÷ Purchase Price) × 100
-```
+\`\`\`
 
 **Performance Benchmarks:**
 - Above 8%: Excellent
@@ -153,23 +153,23 @@ Cap Rate = (NOI ÷ Purchase Price) × 100
 
 ### Cash-on-Cash Return
 
-```
+\`\`\`
 Total Cash Invested = Down Payment + Closing Costs + Renovation + Furnishing
 Annual Net Income = (Net Monthly Revenue - Monthly Expenses) × 12
 Cash-on-Cash Return = (Annual Net Income ÷ Total Cash Invested) × 100
-```
+\`\`\`
 
 ### Return on Investment (ROI)
 
-```
+\`\`\`
 ROI = (Annual Net Income ÷ Total Startup Costs) × 100
-```
+\`\`\`
 
 ### Profit Margin
 
-```
+\`\`\`
 Profit Margin = (Net Monthly Income ÷ Monthly Revenue) × 100
-```
+\`\`\`
 
 ---
 
@@ -177,34 +177,34 @@ Profit Margin = (Net Monthly Income ÷ Monthly Revenue) × 100
 
 ### Property Depreciation (27.5-Year Schedule)
 
-```
+\`\`\`
 Annual Property Depreciation = Purchase Price ÷ 27.5 years
-```
+\`\`\`
 
 **Legal Basis:** IRC Section 168(c) - Residential rental property depreciation over 27.5 years¹
 
 ### 100% Bonus Depreciation (2025 Tax Reforms)
 
-```
+\`\`\`
 Bonus Depreciation = Renovation Costs + Furnishing Costs
 Total Depreciable Assets = 100% of qualifying improvements in first year
-```
+\`\`\`
 
 **Legal Basis:** Trump's "One Big Beautiful Bill Act" (2025) - extends 100% bonus depreciation permanently for qualifying property improvements²
 
 ### Tax Loss Calculation
 
-```
+\`\`\`
 Property Loss = Purchase Price × 0.8 (80% of property value)
 Total Tax Loss = Property Loss + Renovation + Furnishing
 Total Tax Deductions = Total Tax Loss
-```
+\`\`\`
 
 ### Depreciation Tax Savings
 
-```
+\`\`\`
 Depreciation Tax Savings = Total Tax Deductions × (Federal Tax Rate ÷ 100)
-```
+\`\`\`
 
 **Example:**
 - Total Deductions: $340,000 ($240,000 + $50,000 + $50,000)
@@ -213,12 +213,12 @@ Depreciation Tax Savings = Total Tax Deductions × (Federal Tax Rate ÷ 100)
 
 ### Qualified Business Income (QBI) Deduction
 
-```
+\`\`\`
 Net STR Income = Gross STR Income - Operating Expenses
 QBI Eligible Income = Max(0, Net STR Income)
 QBI Deduction = QBI Eligible Income × 0.2 (if Material Participation qualifies)
 QBI Tax Savings = QBI Deduction × (Federal Tax Rate ÷ 100)
-```
+\`\`\`
 
 **Legal Basis:** IRC Section 199A - 20% deduction for qualified business income, made permanent under 2025 tax reforms³
 
@@ -232,10 +232,10 @@ QBI Tax Savings = QBI Deduction × (Federal Tax Rate ÷ 100)
 
 ### Total Annual Tax Savings
 
-```
+\`\`\`
 Total Annual Tax Savings = Depreciation Tax Savings + QBI Tax Savings
 Effective Tax Rate Reduction = (Total Tax Savings ÷ Annual Income) × 100
-```
+\`\`\`
 
 ---
 
@@ -243,11 +243,11 @@ Effective Tax Rate Reduction = (Total Tax Savings ÷ Annual Income) × 100
 
 ### Break-Even Timeline
 
-```
+\`\`\`
 Monthly Net Income = Monthly Revenue - Monthly Expenses
 Break-Even Months = Total Startup Costs ÷ Monthly Net Income (if positive)
 Break-Even Years = Break-Even Months ÷ 12
-```
+\`\`\`
 
 **Interpretation:**
 - ≤12 months: Excellent cash flow
@@ -267,15 +267,15 @@ Break-Even Years = Break-Even Months ÷ 12
 
 ### Revenue per Available Night (RevPAN)
 
-```
+\`\`\`
 RevPAN = (Monthly Revenue ÷ Days in Month)
-```
+\`\`\`
 
 ### Expense Ratio
 
-```
+\`\`\`
 Expense Ratio = (Total Monthly Expenses ÷ Monthly Revenue) × 100
-```
+\`\`\`
 
 **Target Ranges:**
 - <50%: Excellent efficiency
@@ -426,12 +426,12 @@ Recent updates have addressed critical iPad/tablet layout issues:
 
 #### Responsive Breakpoints
 
-```css
+\`\`\`css
 /* Mobile First Approach */
 grid-cols-1          /* Mobile: Single column */
 lg:grid-cols-2       /* Large screens: Two columns */
 /* Removed problematic xl:grid-cols-4 that caused iPad overflow */
-```
+\`\`\`
 
 ### Enhanced Input System
 The calculator now features a comprehensive help system designed for optimal user experience:

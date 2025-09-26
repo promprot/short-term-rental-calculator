@@ -72,7 +72,7 @@ export const metadata: Metadata = {
       { url: "/apple-icon-72x72.png", sizes: "72x72", type: "image/png" },
       { url: "/apple-icon-76x76.png", sizes: "76x76", type: "image/png" },
       { url: "/apple-icon-114x114.png", sizes: "114x114", type: "image/png" },
-      { url: "/apple-icon-120x120.png", sizes: "120x120", type: "image/png" },
+      { url: "/apple-icon-120x120.png", sizes: "120x120.png", type: "image/png" },
       { url: "/apple-icon-144x144.png", sizes: "144x144", type: "image/png" },
       { url: "/apple-icon-152x152.png", sizes: "152x152", type: "image/png" },
       { url: "/apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
@@ -181,10 +181,49 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable} antialiased`}
     >
-      <body>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <head>
+        <link rel="canonical" href="https://str-calculator.vercel.app" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="bingbot" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
+        <link rel="apple-touch-icon-precomposed" href="/apple-icon-precomposed.png" />
+        <link rel="icon" type="image/png" sizes="36x36" href="/android-icon-36x36.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/android-icon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="72x72" href="/android-icon-72x72.png" />
+        <link rel="icon" type="image/png" sizes="144x144" href="/android-icon-144x144.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="theme-color" content="#3b82f6" />
+      </head>
+      <body className={`font-sans ${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
       </body>
     </html>
