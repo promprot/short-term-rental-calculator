@@ -72,7 +72,7 @@ export function InputField({
     } else {
       setDisplayValue(value.toString())
     }
-  }, [])
+  }, []) // Only run on mount
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
@@ -80,7 +80,8 @@ export function InputField({
     if (prefix === "$") {
       const cleanValue = inputValue.replace(/[^0-9.,]/g, "")
       setDisplayValue(cleanValue)
-      // Don't call onChange here - only on blur to prevent feedback loop
+      const numValue = parseCurrency(cleanValue)
+      onChange(numValue.toString())
     } else {
       setDisplayValue(inputValue)
       onChange(inputValue)
@@ -99,9 +100,7 @@ export function InputField({
     setIsFocused(false)
     if (prefix === "$") {
       const numValue = parseCurrency(displayValue)
-      onChange(numValue.toString())
 
-      // Format for display
       if (numValue > 0) {
         setDisplayValue(formatCurrency(numValue))
       } else {
