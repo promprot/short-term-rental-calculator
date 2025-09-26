@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 interface InputFieldProps {
   label: string
@@ -29,8 +29,6 @@ export function InputField({
   placeholder,
   className,
 }: InputFieldProps) {
-  const [displayValue, setDisplayValue] = useState("")
-  const [isFocused, setIsFocused] = useState(false)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const formatCurrency = (num: number): string => {
@@ -43,69 +41,32 @@ export function InputField({
 
   const parseCurrency = (str: string): number => {
     if (!str) return 0
-    // Remove commas and parse as float
-    const cleaned = str.replace(/,/g, "")
+    const cleaned = str.replace(/[^0-9.]/g, "")
     const parsed = Number.parseFloat(cleaned)
     return isNaN(parsed) ? 0 : parsed
   }
-
-  useEffect(() => {
-    if (!isFocused) {
-      const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
-      if (prefix === "$" && numValue > 0) {
-        const formatted = formatCurrency(numValue)
-        setDisplayValue(formatted)
-      } else if (prefix === "$") {
-        setDisplayValue("")
-      } else {
-        setDisplayValue(value.toString())
-      }
-    }
-  }, [value, isFocused, prefix])
-
-  useEffect(() => {
-    const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
-    if (prefix === "$" && numValue > 0) {
-      setDisplayValue(formatCurrency(numValue))
-    } else if (prefix === "$") {
-      setDisplayValue("")
-    } else {
-      setDisplayValue(value.toString())
-    }
-  }, []) // Only run on mount
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
 
     if (prefix === "$") {
+      // Allow typing numbers, commas, and decimal points
       const cleanValue = inputValue.replace(/[^0-9.,]/g, "")
-      setDisplayValue(cleanValue)
-      const numValue = parseCurrency(cleanValue)
-      onChange(numValue.toString())
+      onChange(parseCurrency(cleanValue).toString())
     } else {
-      setDisplayValue(inputValue)
       onChange(inputValue)
     }
   }
 
-  const handleFocus = () => {
-    setIsFocused(true)
-    if (prefix === "$") {
-      const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
-      setDisplayValue(numValue > 0 ? numValue.toString() : "")
-    }
-  }
+  const getDisplayValue = () => {
+    const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
 
-  const handleBlur = () => {
-    setIsFocused(false)
-    if (prefix === "$") {
-      const numValue = parseCurrency(displayValue)
-
-      if (numValue > 0) {
-        setDisplayValue(formatCurrency(numValue))
-      } else {
-        setDisplayValue("")
-      }
+    if (prefix === "$" && numValue > 0) {
+      return formatCurrency(numValue)
+    } else if (prefix === "$") {
+      return ""
+    } else {
+      return value.toString()
     }
   }
 
@@ -127,11 +88,9 @@ export function InputField({
         {prefix && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{prefix}</div>}
         <Input
           id={label.replace(/\s+/g, "-").toLowerCase()}
-          type={type}
-          value={displayValue}
+          type="text"
+          value={getDisplayValue()}
           onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           placeholder={placeholder}
           className={cn(prefix && "pl-8", suffix && "pr-8")}
         />

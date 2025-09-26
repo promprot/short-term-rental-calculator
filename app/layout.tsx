@@ -4,13 +4,26 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Suspense } from "react"
 
-import { Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
-import { Inter, Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
+import { Inter, Geist, Geist_Mono, Source_Serif_4 } from "next/font/google"
 
-// Initialize fonts
-V0_Font_Geist({ weight: ["100","200","300","400","500","600","700","800","900"] })
-V0_Font_Geist_Mono({ weight: ["100","200","300","400","500","600","700","800","900"] })
-V0_Font_Source_Serif_4({ weight: ["200","300","400","500","600","700","800","900"] })
+// Initialize fonts with proper const assignments
+const geist = Geist({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-geist",
+})
+
+const geistMono = Geist_Mono({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+})
+
+const sourceSerif = Source_Serif_4({
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+})
 
 const inter = Inter({
   subsets: ["latin"],
@@ -166,7 +179,10 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${geist.variable} ${geistMono.variable} ${sourceSerif.variable} antialiased`}
+    >
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

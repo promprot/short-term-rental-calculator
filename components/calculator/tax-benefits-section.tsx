@@ -102,11 +102,8 @@ export function TaxBenefitsSection({ data, onChange, isOpen, onToggle }: TaxBene
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="50">50 hours</SelectItem>
                   <SelectItem value="100">100 hours</SelectItem>
-                  <SelectItem value="250">250 hours</SelectItem>
                   <SelectItem value="500">500 hours</SelectItem>
-                  <SelectItem value="750">750 hours</SelectItem>
                 </SelectContent>
               </Select>
               {isHoursDescriptionOpen && (

@@ -157,19 +157,31 @@ export default function STRCalculator() {
 
     const depreciationBasis = data.purchasePrice * 0.8 // 80% of purchase price (excluding land)
     const annualDepreciation = depreciationBasis / 27.5 // 27.5-year schedule for residential rental
-    const bonusDepreciation = data.renovation + data.furnishing // 100% bonus depreciation under 2025 reforms
+
+    // 100% bonus depreciation applies to personal property and qualified improvements only
+    // This includes furniture, appliances, and certain renovations with MACRS life of 20 years or less
+    const personalPropertyBasis = data.furnishing + data.renovation * 0.6 // Assume 60% of renovation qualifies
+    const bonusDepreciation = personalPropertyBasis // 100% bonus depreciation under 2025 reforms
     const totalFirstYearDepreciation = annualDepreciation + bonusDepreciation
 
-    const netBusinessIncome = Math.max(0, netOperatingIncome - annualDepreciation) // Business income after regular depreciation
-    const qbiEligibleIncome = data.materialParticipation ? netBusinessIncome : 0 // QBI only if material participation
+    // Material participation requires 500+ hours OR 100+ hours with no one else participating more
+    const qualifiesForMaterialParticipation = data.materialParticipation && data.spouseHours >= 100
+
+    // QBI calculation - only applies to positive business income with material participation
+    const netBusinessIncome = netOperatingIncome - annualDepreciation // Business income after regular depreciation
+    const qbiEligibleIncome = qualifiesForMaterialParticipation && netBusinessIncome > 0 ? netBusinessIncome : 0
     const qbiDeduction = qbiEligibleIncome * 0.2 // 20% QBI deduction (permanent under 2025 reforms)
 
-    const totalTaxLoss = totalFirstYearDepreciation - netOperatingIncome
-    const passiveLossLimitation = data.materialParticipation
+    // Passive loss limitation calculation
+    const totalTaxableIncome = netOperatingIncome - totalFirstYearDepreciation
+    const passiveLossLimitation = qualifiesForMaterialParticipation
       ? 0 // No limitation with material participation
-      : Math.max(0, totalTaxLoss) // Passive losses limited if no material participation
+      : Math.max(0, -totalTaxableIncome) // Passive losses limited if no material participation
 
+    // Calculate allowable deductions
     const allowableDepreciationDeduction = totalFirstYearDepreciation - passiveLossLimitation
+
+    // Tax savings calculation
     const depreciationTaxSavings = allowableDepreciationDeduction * (data.federalTaxRate / 100)
     const qbiTaxSavings = qbiDeduction * (data.federalTaxRate / 100)
     const taxSavings = depreciationTaxSavings + qbiTaxSavings
