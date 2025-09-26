@@ -1,11 +1,11 @@
 {
   "name": "STR Financial Calculator",
   "short_name": "STR Calculator",
-  "description": "Short-term rental calculator for investment properties on Airbnb and VRBO. Calculate cash flow, ROI, cap rate, tax benefits, and more.",
+  "description": "Short-term rental investment calculator with advanced features",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "background_color": "#1a1a2e",
+  "theme_color": "#6366f1",
   "icons": [
     {
       "src": "/favicon-16x16.png",

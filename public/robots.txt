@@ -1,8 +1,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: /sitemap.xml
+Sitemap: https://strcal.com/sitemap.xml
 
-# Crawl delay (optional - helps prevent server overload)
+# Crawl delay (optional)
 Crawl-delay: 1

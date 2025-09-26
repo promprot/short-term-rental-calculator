@@ -1,4 +1,4 @@
-# STR Financial Calculator - SEO & Sharing Implementation
+# STRCAL - SEO & Sharing Implementation
 
 ## Overview
 
@@ -11,52 +11,8 @@ This document outlines all SEO, social sharing, and web app optimizations implem
 - **Footer Enhancement**: Added sticky footer with social media integration
 - **Brand Integration**: Updated with promprot.com branding and social links
 - **UI Consistency**: Standardized help icons across all field types
-
-## Icon & Favicon Implementation
-
-### Standard Favicons
-
-- `favicon.ico` - Main favicon file (16x16, 32x32, 48x48 multi-size)
-- `favicon-16x16.png` - 16x16 PNG favicon
-- `favicon-32x32.png` - 32x32 PNG favicon
-- `favicon-96x96.png` - 96x96 PNG favicon
-
-### Apple Touch Icons (iOS Support)
-
-- `apple-icon-57x57.png` - iPhone (iOS 6 and prior)
-- `apple-icon-60x60.png` - iPhone (iOS 7+)
-- `apple-icon-72x72.png` - iPad (iOS 6 and prior)
-- `apple-icon-76x76.png` - iPad (iOS 7+)
-- `apple-icon-114x114.png` - iPhone Retina (iOS 6 and prior)
-- `apple-icon-120x120.png` - iPhone Retina (iOS 7+)
-- `apple-icon-144x144.png` - iPad Retina (iOS 6 and prior)
-- `apple-icon-152x152.png` - iPad Retina (iOS 7+)
-- `apple-icon-180x180.png` - iPhone 6 Plus/X and newer
-- `apple-icon-precomposed.png` - Prevents iOS from adding effects
-- `apple-icon.png` - General Apple icon fallback
-
-### Android Icons
-
-- `android-icon-36x36.png` - LDPI (Low Density)
-- `android-icon-48x48.png` - MDPI (Medium Density)
-- `android-icon-72x72.png` - HDPI (High Density)
-- `android-icon-96x96.png` - XHDPI (Extra High Density)
-- `android-icon-144x144.png` - XXHDPI (Extra Extra High Density)
-- `android-icon-192x192.png` - XXXHDPI (Extra Extra Extra High Density)
-
-# STR Financial Calculator - SEO & Sharing Implementation
-
-## Overview
-
-This document outlines all SEO, social sharing, and web app optimizations implemented for the STR Financial Calculator application, including recent UI/UX enhancements and responsive design improvements.
-
-## Recent Updates (September 2025)
-
-- **Enhanced User Experience**: Implemented collapsible help descriptions for all 43+ input fields
-- **Responsive Design**: Fixed iPad/tablet layout issues with proper grid systems
-- **Footer Enhancement**: Added sticky footer with social media integration
-- **Brand Integration**: Updated with promprot.com branding and social links
-- **UI Consistency**: Standardized help icons across all field types
+- **SEO Enhancement**: Updated canonical URLs, author attribution, and theme colors
+- **Structured Data**: Enhanced JSON-LD with comprehensive feature list
 
 ## Icon & Favicon Implementation
 
@@ -102,41 +58,47 @@ This document outlines all SEO, social sharing, and web app optimizations implem
 ### Basic SEO Tags
 
 \`\`\`html
-<title>STR Financial Calculator - Short-Term Rental Investment Analysis Tool</title>
-<meta name="description" content="Free short-term rental calculator for Airbnb and vacation rental investors. Analyze cash flow, ROI, and profitability with our comprehensive STR investment tool." />
-<meta name="keywords" content="short-term rental calculator, Airbnb calculator, vacation rental ROI, STR investment analysis, rental property calculator, cash flow calculator" />
+<title>STR Financial Calculator - Short Term Rental ROI & Tax Benefits Analysis</title>
+<meta name="description" content="Professional short-term rental calculator for Airbnb and VRBO investments. Analyze cash flow, ROI, cap rates, and maximize tax benefits with 100% bonus depreciation, QBI deductions, and material participation strategies under Trump's 2025 tax reforms." />
+<meta name="keywords" content="short term rental, airbnb calculator, vrbo calculator, rental property ROI, cash flow analysis, real estate investment, STR tax benefits, bonus depreciation, QBI deduction, material participation, real estate tax savings, Trump tax reforms 2025, rental property depreciation, high earner tax strategies" />
 <meta name="author" content="$κιηηερ - promprot.com" />
-<meta name="robots" content="index, follow" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+<meta name="bingbot" content="index, follow" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+<meta name="theme-color" content="#6366f1" />
 <link rel="canonical" href="https://strcal.com" />
 \`\`\`
 
 ### Open Graph Tags (Facebook, LinkedIn)
 
 \`\`\`html
-<meta property="og:title" content="STR Financial Calculator - Short-Term Rental Investment Analysis" />
-<meta property="og:description" content="Free calculator for analyzing short-term rental investments. Calculate cash flow, ROI, and profitability for Airbnb and vacation rental properties." />
+<meta property="og:title" content="STR Financial Calculator - Short Term Rental ROI & Tax Benefits Analysis" />
+<meta property="og:description" content="Professional short-term rental calculator for Airbnb and VRBO investments. Analyze cash flow, ROI, cap rates, and maximize tax benefits with 100% bonus depreciation and QBI deductions." />
 <meta property="og:image" content="/str-cal-preview.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://strcal.com" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="STR Financial Calculator" />
+<meta property="og:locale" content="en_US" />
 \`\`\`
 
 ### Twitter Card Tags
 
 \`\`\`html
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="STR Financial Calculator - Short-Term Rental Investment Analysis" />
-<meta name="twitter:description" content="Free calculator for analyzing short-term rental investments. Calculate cash flow, ROI, and profitability for Airbnb properties." />
+<meta name="twitter:title" content="STR Financial Calculator - Short Term Rental ROI & Tax Benefits Analysis" />
+<meta name="twitter:description" content="Professional short-term rental calculator for Airbnb and VRBO investments. Analyze cash flow, ROI, and maximize tax benefits with bonus depreciation." />
 <meta name="twitter:image" content="/str-cal-preview.png" />
 <meta name="twitter:creator" content="@promprot" />
 \`\`\`
 
 ## Structured Data (JSON-LD)
 
-Implemented schema.org structured data to help search engines understand the application:
+Enhanced schema.org structured data to help search engines understand the application:
 
 \`\`\`json
 {
@@ -205,29 +167,6 @@ Implemented schema.org structured data to help search engines understand the app
 </browserconfig>
 \`\`\`
 
-## User Experience Enhancements
-
-### Collapsible Help System
-
-- **Implementation**: All 43+ input fields now feature collapsible help descriptions
-- **Consistency**: Standardized help icon sizing (16px) across InputField, SliderField, and dropdown components
-- **Interaction**: Click-to-toggle functionality with smooth animations
-- **Accessibility**: Proper ARIA labels and keyboard navigation support
-
-### Responsive Design Improvements
-
-- **iPad Optimization**: Fixed layout overflow issues with proper grid systems
-- **Breakpoint Strategy**: Simplified responsive approach (single column mobile, 2-column tablet, multi-column desktop)
-- **Touch Targets**: Enlarged interactive elements for better mobile experience
-- **Typography**: Improved font scaling across different screen sizes
-
-### Footer Enhancement
-
-- **Sticky Positioning**: Footer remains visible at bottom of viewport
-- **Social Integration**: Added X (Twitter), GitHub, website, and contact icons
-- **Brand Links**: Integrated promprot.com branding with proper attribution
-- **Hover Effects**: Purple theme integration with smooth transitions
-
 ## Search Engine Optimization Files
 
 ### Robots.txt
@@ -250,7 +189,7 @@ Crawl-delay: 1
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://strcal.com</loc>
-    <lastmod>2025-09-22</lastmod>
+    <lastmod>2025-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -273,10 +212,11 @@ Crawl-delay: 1
 ### SEO Benefits
 
 - **Search Engine Visibility**: Comprehensive meta tags and structured data
-- **Rich Snippets**: JSON-LD helps search engines display enhanced results
+- **Rich Snippets**: Enhanced JSON-LD helps search engines display enhanced results
 - **Crawlability**: Robots.txt and sitemap.xml guide search engine bots
 - **Mobile Optimization**: Responsive design and mobile-specific meta tags
 - **Author Attribution**: Proper author markup for content credibility
+- **Theme Integration**: Consistent purple theme across all platforms
 
 ### Social Sharing Benefits
 
@@ -288,7 +228,7 @@ Crawl-delay: 1
 ### User Experience Benefits
 
 - **Cross-Platform Icons**: Optimized icons for all devices and platforms
-- **PWA Capabilities**: Can be installed as a native-like app
+- **PWA Capabilities**: Can be installed as a native-like app with dark theme
 - **Fast Loading**: Optimized meta tags and structured data
 - **Professional Appearance**: Consistent branding across all touchpoints
 - **Enhanced Usability**: Collapsible help system reduces cognitive load
@@ -304,16 +244,8 @@ Crawl-delay: 1
 6. **Help System**: Collapsible descriptions with consistent 16px help icons
 7. **Grid Systems**: Fixed responsive layouts preventing content overflow
 8. **Brand Integration**: Seamless promprot.com branding throughout
-
-## Future Enhancements
-
-- Add Google Analytics/Search Console integration
-- Implement Open Graph article tags for blog content
-- Add breadcrumb structured data
-- Consider AMP (Accelerated Mobile Pages) implementation
-- Add more detailed FAQ structured data
-- Implement advanced PWA features (push notifications, background sync)
-- Add A/B testing for help system effectiveness
+9. **Theme Consistency**: Purple theme (#6366f1) and dark background (#1a1a2e) across all platforms
+10. **Canonical URLs**: Consistent use of https://strcal.com as canonical domain
 
 ## Performance Metrics
 
@@ -330,8 +262,20 @@ Crawl-delay: 1
 - **Keyboard Navigation**: Full keyboard accessibility
 - **Color Contrast**: Meets or exceeds 4.5:1 ratio requirements
 
+## Future Enhancements
+
+- Add Google Analytics/Search Console integration
+- Implement Open Graph article tags for blog content
+- Add breadcrumb structured data
+- Consider AMP (Accelerated Mobile Pages) implementation
+- Add more detailed FAQ structured data
+- Implement advanced PWA features (push notifications, background sync)
+- Add A/B testing for help system effectiveness
+- Implement dynamic sitemap generation for multiple pages
+- Add hreflang tags for international SEO (if expanding globally)
+
 ---
 
-*Last Updated: September 23, 2025*
-*Version: 3.0*
+*Last Updated: September 26, 2025*
+*Version: 3.1*
 *Author: Creative Sky Consulting - CreativeSky.ai*

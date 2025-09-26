@@ -15,29 +15,30 @@ interface CalculatorData {
   // Revenue data
   averageNightlyRate: number
   occupancyRate: number
-  cleaningFee: number
+  // Operating costs data
+  cleaningFee: number // Moved cleaningFee from revenue to costs section
   managementFee: number
-  platformFees: number // Added platform fees
+  platformFees: number
   lodgingTax: number
   propertyTax: number
-  cleaningFees: number
   maintenance: number
   insurance: number
   utilities: number
   hoaFees: number
   other: number
-  // Startup data
+  // Investment property data
   purchasePrice: number
   downPayment: number
-  closingCosts: number // Added closing costs field
-  interestRate: number // Added interest rate
+  closingCosts: number
+  interestRate: number
   renovation: number
   furnishing: number
+  loanTerm: number
+  // Tax benefits data
   annualIncome: number
   federalTaxRate: number
   spouseHours: number
   materialParticipation: boolean
-  loanTerm: number
 }
 
 export default function STRCalculator() {
@@ -60,31 +61,32 @@ export default function STRCalculator() {
 
   const [data, setData] = useState<CalculatorData>({
     // Revenue defaults
-    averageNightlyRate: 200, // Updated default nightly rate from 150 to 200
+    averageNightlyRate: 200,
     occupancyRate: 65,
-    cleaningFee: 125, // Updated cleaning fee from $75 to $125 for more accurate market rate
+    // Operating costs defaults
+    cleaningFee: 125, // Moved cleaningFee default to costs section
     managementFee: 0,
-    platformFees: 3, // Default 3% for Airbnb host fee
+    platformFees: 3,
     lodgingTax: 2400,
     propertyTax: 4800,
-    cleaningFees: 125, // Now represents cleaning fee per stay, not annual cost
-    maintenance: 0, // Set maintenance cost to $0
+    maintenance: 0,
     insurance: 2400,
     utilities: 0,
     hoaFees: 0,
     other: 0,
-    // Startup defaults
-    purchasePrice: 300000, // Set purchase price to $300,000
-    downPayment: 60000, // Set down payment to $60,000
-    closingCosts: 15000, // Set closing costs to $15,000
-    interestRate: 6.5, // Updated interest rate from 7.5% to 6.5%
-    renovation: 0, // Updated renovation from 50000 to 0
-    furnishing: 0, // Updated furnishing from 50000 to 0
-    annualIncome: 400000, // $400k annual income
-    federalTaxRate: 37, // 37% tax bracket for $400k income
-    spouseHours: 500, // Default to 500 hours for material participation
-    materialParticipation: true, // Default to qualifying for material participation
-    loanTerm: 30, // Default 30-year loan term
+    // Investment property defaults
+    purchasePrice: 300000,
+    downPayment: 60000,
+    closingCosts: 15000,
+    interestRate: 6.5,
+    renovation: 0,
+    furnishing: 0,
+    loanTerm: 30,
+    // Tax benefits defaults
+    annualIncome: 400000,
+    federalTaxRate: 37,
+    spouseHours: 500,
+    materialParticipation: true,
   })
 
   const updateData = (field: string, value: number | boolean) => {
@@ -95,11 +97,11 @@ export default function STRCalculator() {
     setOpenSections((prev) => {
       const newSections = new Set(prev)
       if (newSections.has(section)) {
-        // If closing a section, close all sections
-        return new Set()
+        newSections.delete(section)
       } else {
-        return new Set([section])
+        newSections.add(section)
       }
+      return newSections
     })
   }
 
@@ -240,8 +242,9 @@ export default function STRCalculator() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-balance">Short Term Rental Calculator</h1>
-                <p className="text-sm text-muted-foreground text-pretty">
-                  Analyze your investment potential with comprehensive financial projections
+                <p className="text-sm text-muted-foreground text-pretty max-w-2xl">
+                  Calculate Airbnb and VRBO investment returns and operating costs. Analyze revenue potential, operating
+                  costs, tax benefits, and ROI for your vacation rental property investment.
                 </p>
               </div>
             </div>
@@ -264,20 +267,19 @@ export default function STRCalculator() {
               data={{
                 averageNightlyRate: data.averageNightlyRate,
                 occupancyRate: data.occupancyRate,
-                cleaningFee: data.cleaningFee,
               }}
               onChange={updateData}
-              isOpen={openSections.has("revenue")}
-              onToggle={() => handleSectionToggle("revenue")}
+              isOpen={openSections.has("rental")}
+              onToggle={() => handleSectionToggle("rental")}
             />
 
             <CostsSection
               data={{
+                cleaningFee: data.cleaningFee, // Added cleaningFee to costs section data
                 managementFee: data.managementFee,
                 platformFees: data.platformFees,
                 lodgingTax: data.lodgingTax,
                 propertyTax: data.propertyTax,
-                cleaningFees: data.cleaningFees,
                 maintenance: data.maintenance,
                 insurance: data.insurance,
                 utilities: data.utilities,
@@ -300,8 +302,8 @@ export default function STRCalculator() {
                 loanTerm: data.loanTerm,
               }}
               onChange={updateData}
-              isOpen={openSections.has("startup")}
-              onToggle={() => handleSectionToggle("startup")}
+              isOpen={openSections.has("property")}
+              onToggle={() => handleSectionToggle("property")}
             />
 
             <TaxBenefitsSection
@@ -312,8 +314,8 @@ export default function STRCalculator() {
                 materialParticipation: data.materialParticipation,
               }}
               onChange={updateData}
-              isOpen={openSections.has("tax")}
-              onToggle={() => handleSectionToggle("tax")}
+              isOpen={openSections.has("benefits")}
+              onToggle={() => handleSectionToggle("benefits")}
             />
           </div>
 

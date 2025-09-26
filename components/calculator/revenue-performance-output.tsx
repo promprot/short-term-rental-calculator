@@ -1,8 +1,8 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { TrendingUp, HelpCircle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { TrendingUp, HelpCircle, DollarSign, Calendar, Target, BarChart3 } from "lucide-react"
 import { useState } from "react"
 
 interface RevenuePerformanceOutputProps {
@@ -31,37 +31,37 @@ export function RevenuePerformanceOutput({ results, showYearly, onToggleView }: 
     }).format(amount)
   }
 
-  const formatPercent = (percent: number) => {
-    return `${percent.toFixed(1)}%`
+  const getRevenueColor = (value: number, type: "gross" | "net") => {
+    const monthlyValue = type === "gross" ? value : value
+    if (monthlyValue >= 8000) return "text-emerald-600" // Excellent revenue - green
+    if (monthlyValue >= 5000) return "text-emerald-500" // Good revenue - lighter green
+    if (monthlyValue >= 3000) return "text-yellow-600" // Fair revenue - yellow
+    if (monthlyValue >= 1000) return "text-orange-500" // Poor revenue - orange
+    return "text-red-500" // Very poor - red
   }
 
-  const getValueColor = (value: number, type: "revenue" | "profit" | "rate") => {
-    switch (type) {
-      case "revenue":
-        return "text-green-600 dark:text-green-400"
-      case "profit":
-        if (value > 0) return "text-green-600 dark:text-green-400"
-        if (value === 0) return "text-muted-foreground"
-        return "text-red-600 dark:text-red-400"
-      case "rate":
-        if (value >= 15) return "text-green-600 dark:text-green-400"
-        if (value >= 10) return "text-green-600 dark:text-green-400"
-        if (value >= 6) return "text-green-600 dark:text-green-400"
-        if (value >= 3) return "text-green-600 dark:text-green-400"
-        return "text-red-600 dark:text-red-400"
-      default:
-        return "text-foreground"
-    }
+  const getRevenueBadge = (value: number, type: "gross" | "net") => {
+    const monthlyValue = type === "gross" ? value : value
+    if (monthlyValue >= 8000) return { label: "Excellent", className: "bg-emerald-100 text-emerald-700" }
+    if (monthlyValue >= 5000) return { label: "Very Good", className: "bg-emerald-50 text-emerald-600" }
+    if (monthlyValue >= 3000) return { label: "Good", className: "bg-yellow-100 text-yellow-700" }
+    if (monthlyValue >= 1000) return { label: "Fair", className: "bg-orange-100 text-orange-700" }
+    return { label: "Poor", className: "bg-red-100 text-red-700" }
+  }
+
+  const getOccupancyColor = (nights: number) => {
+    if (nights >= 25) return "text-emerald-600" // Excellent occupancy
+    if (nights >= 20) return "text-emerald-500" // Good occupancy
+    if (nights >= 15) return "text-yellow-600" // Fair occupancy
+    if (nights >= 10) return "text-orange-500" // Poor occupancy
+    return "text-red-500" // Very poor occupancy
   }
 
   const tooltipContent = {
     grossRevenue:
       "Gross Revenue is your total rental income before any expenses, calculated as nightly rate × occupancy rate × cleaning fees. This represents your maximum earning potential.",
     netCashFlow:
-      "Net Cash Flow is your monthly profit after all expenses including mortgage, taxes, fees, and operating costs. Positive cash flow means the property pays for itself and generates income.",
-    adr: "Average Daily Rate is your revenue per occupied night, calculated as total nightly revenue divided by nights booked. Compare this to local hotel rates and similar short-term rentals to ensure competitive pricing.",
-    occupancy:
-      "Occupancy Rate shows the percentage of nights your property is booked per year. Market averages vary by location: urban areas typically see 60-75%, vacation destinations 50-70%. Higher rates indicate strong demand.",
+      "Net Revenue is your monthly profit after platform fees but before operating expenses. This shows your actual revenue after booking platform commissions.",
   }
 
   const toggleHelp = (field: string) => {
@@ -69,90 +69,122 @@ export function RevenuePerformanceOutput({ results, showYearly, onToggleView }: 
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="overflow-hidden">
+      <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            Revenue & Performance
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <BarChart3 className="h-4 w-4 text-primary" />
+            </div>
+            <span className="text-lg font-semibold">Revenue</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">
-              {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}/
-              {showYearly ? "year" : "month"}
-            </Badge>
-            <Button variant="outline" size="sm" onClick={onToggleView}>
-              {showYearly ? "Monthly" : "Yearly"}
-            </Button>
-          </div>
+          <Button variant="outline" size="sm" onClick={onToggleView} className="shrink-0 bg-transparent">
+            {showYearly ? "Monthly" : "Yearly"}
+          </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Gross Revenue</span>
-            <button
-              onClick={() => toggleHelp("grossRevenue")}
-              className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-              aria-label="Toggle Gross Revenue information"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </button>
+      <CardContent className="space-y-6">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-3 rounded-lg border bg-muted/30 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Gross Revenue</span>
+                <button
+                  onClick={() => toggleHelp("grossRevenue")}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Toggle Gross Revenue information"
+                >
+                  <HelpCircle className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <Badge className={getRevenueBadge(results.grossMonthlyRevenue, "gross").className}>
+                {getRevenueBadge(results.grossMonthlyRevenue, "gross").label}
+              </Badge>
+            </div>
+            <div className={`text-2xl font-bold ${getRevenueColor(results.grossMonthlyRevenue, "gross")}`}>
+              {formatCurrency(showYearly ? results.grossMonthlyRevenue * 12 : results.grossMonthlyRevenue)}
+            </div>
+            <p className="text-xs text-muted-foreground">Total rental income before expenses</p>
+
+            {expandedHelp === "grossRevenue" && (
+              <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm text-primary">
+                <strong>Gross Revenue:</strong> {tooltipContent.grossRevenue}
+              </div>
+            )}
           </div>
-          <span className={`text-sm font-medium ${getValueColor(results.grossMonthlyRevenue, "revenue")}`}>
-            {formatCurrency(showYearly ? results.grossMonthlyRevenue * 12 : results.grossMonthlyRevenue)}
-          </span>
+
+          <div className="space-y-3 rounded-lg border bg-muted/30 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Net Revenue</span>
+                <button
+                  onClick={() => toggleHelp("netCashFlow")}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Toggle Net Revenue information"
+                >
+                  <HelpCircle className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <Badge className={getRevenueBadge(results.monthlyRevenue, "net").className}>
+                {getRevenueBadge(results.monthlyRevenue, "net").label}
+              </Badge>
+            </div>
+            <div className={`text-2xl font-bold ${getRevenueColor(results.monthlyRevenue, "net")}`}>
+              {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}
+            </div>
+            <p className="text-xs text-muted-foreground">Revenue after platform fees</p>
+
+            {expandedHelp === "netCashFlow" && (
+              <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm text-primary">
+                <strong>Net Revenue:</strong> {tooltipContent.netCashFlow}
+              </div>
+            )}
+          </div>
         </div>
-        <div className="text-xs text-muted-foreground">Total rental income before expenses</div>
 
-        {expandedHelp === "grossRevenue" && (
-          <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-            <strong>Gross Revenue Info:</strong> {tooltipContent.grossRevenue}
-          </div>
-        )}
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Net Revenue</span>
-            <button
-              onClick={() => toggleHelp("netCashFlow")}
-              className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-              aria-label="Toggle Net Cash Flow information"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </button>
-          </div>
-          <span className={`text-sm font-medium ${getValueColor(results.monthlyRevenue, "profit")}`}>
-            {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}
-          </span>
-        </div>
-        <div className="text-xs text-muted-foreground">Revenue after platform fees</div>
-
-        {expandedHelp === "netCashFlow" && (
-          <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-            <strong>Net Revenue Info:</strong> {tooltipContent.netCashFlow}
-          </div>
-        )}
-
-        <div className="grid grid-cols-2 gap-4 pt-2">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Nights Booked</span>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex items-center justify-between rounded-lg border bg-muted/20 p-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Calendar className={`h-4 w-4 ${getOccupancyColor(results.nightsBooked)}`} />
+                <span className="text-sm font-medium">Nights Booked</span>
+              </div>
+              <div className={`text-2xl font-bold ${getOccupancyColor(results.nightsBooked)}`}>
+                {showYearly ? Math.round(results.nightsBooked * 12) : results.nightsBooked}
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="text-xs">
+                  {showYearly ? "nights/year" : "nights/month"}
+                </Badge>
+                <Badge
+                  className={`text-xs ${getOccupancyColor(results.nightsBooked) === "text-emerald-600" ? "bg-emerald-100 text-emerald-700" : getOccupancyColor(results.nightsBooked) === "text-emerald-500" ? "bg-emerald-50 text-emerald-600" : "bg-yellow-100 text-yellow-700"}`}
+                >
+                  {((results.nightsBooked / 30) * 100).toFixed(0)}% occupancy
+                </Badge>
+              </div>
             </div>
-            <div className="text-lg font-semibold text-green-600 dark:text-green-400">
-              {showYearly ? Math.round(results.nightsBooked * 12) : results.nightsBooked}
-            </div>
-            <div className="text-xs text-muted-foreground">{showYearly ? "nights/year" : "nights/month"}</div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Bookings</span>
+          <div className="flex items-center justify-between rounded-lg border bg-muted/20 p-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-emerald-600" />
+                <span className="text-sm font-medium">Bookings</span>
+              </div>
+              <div className="text-2xl font-bold text-emerald-600">
+                {showYearly ? Math.round(results.bookingsPerMonth * 12) : results.bookingsPerMonth}
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="text-xs">
+                  {showYearly ? "bookings/year" : "bookings/month"}
+                </Badge>
+                <Badge className="bg-emerald-100 text-emerald-700 text-xs">
+                  {(results.nightsBooked / results.bookingsPerMonth).toFixed(1)} nights/booking
+                </Badge>
+              </div>
             </div>
-            <div className="text-lg font-semibold text-green-600 dark:text-green-400">
-              {showYearly ? Math.round(results.bookingsPerMonth * 12) : results.bookingsPerMonth}
-            </div>
-            <div className="text-xs text-muted-foreground">{showYearly ? "bookings/year" : "bookings/month"}</div>
           </div>
         </div>
       </CardContent>

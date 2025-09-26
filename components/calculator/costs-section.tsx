@@ -7,11 +7,11 @@ import { SliderField } from "./slider-field"
 
 interface CostsSectionProps {
   data: {
+    cleaningFee: number
     managementFee: number
     platformFees: number
     lodgingTax: number
     propertyTax: number
-    cleaningFees: number
     maintenance: number
     insurance: number
     utilities: number
@@ -29,8 +29,10 @@ export function CostsSection({ data, onChange, isOpen, onToggle }: CostsSectionP
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Receipt className="h-5 w-5" />
-            Operating Costs
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Receipt className="h-4 w-4 text-primary" />
+            </div>
+            Costs
           </div>
           <Button variant="ghost" size="sm" onClick={onToggle}>
             {isOpen ? "Collapse" : "Expand"}
@@ -41,12 +43,20 @@ export function CostsSection({ data, onChange, isOpen, onToggle }: CostsSectionP
       {!isOpen && (
         <CardContent>
           <div className="text-sm text-muted-foreground">
-            {data.managementFee}% management • {data.platformFees}% platform fees • ${data.propertyTax} property tax
+            ${data.cleaningFee} cleaning fee • {data.managementFee}% management • {data.platformFees}% platform fees
           </div>
         </CardContent>
       )}
       {isOpen && (
         <CardContent className="space-y-6">
+          <InputField
+            label="Cleaning Fee per Stay"
+            value={data.cleaningFee}
+            onChange={(value) => onChange("cleaningFee", Number.parseFloat(value) || 0)}
+            prefix="$"
+            description="One-time cleaning fee charged per booking (minimum 2 nights). Set competitively: Studio/1BR: $75-125, 2-3BR: $100-175, 4+BR: $150-300. This fee is revenue to you - actual cleaning costs are calculated separately based on your occupancy rate."
+            placeholder="125"
+          />
           {/* Property-related fixed costs first */}
           <InputField
             label="Property Tax (Annual)"
@@ -100,14 +110,6 @@ export function CostsSection({ data, onChange, isOpen, onToggle }: CostsSectionP
             step={0.1}
             suffix="%"
             description="Platform booking fees charged by Airbnb (typically 3% host fee) and VRBO (typically 5-8% commission). These are deducted from your payout automatically. Factor in payment processing fees and any additional service charges."
-          />
-          <InputField
-            label="Cleaning Fee per Stay"
-            value={data.cleaningFees}
-            onChange={(value) => onChange("cleaningFees", Number.parseFloat(value) || 0)}
-            prefix="$"
-            description="Cleaning fee charged to guests per booking. This will be used to calculate total cleaning revenue and actual cleaning costs (typically 60% of fee charged). Standard range is $75-150 depending on property size and local market rates."
-            placeholder="125"
           />
           <InputField
             label="Maintenance & Repairs (Annual)"

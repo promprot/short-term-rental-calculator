@@ -35,8 +35,10 @@ export function StartupSection({ data, onChange, isOpen, onToggle }: StartupSect
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Home className="h-5 w-5" />
-            Investment Property
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Home className="h-4 w-4 text-primary" />
+            </div>
+            Property
           </div>
           <Button variant="ghost" size="sm" onClick={onToggle}>
             {isOpen ? "Collapse" : "Expand"}
