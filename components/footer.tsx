@@ -5,27 +5,24 @@ export function Footer() {
     <footer className="border-t bg-card mt-auto">
       <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
-          {/* Copyright */}
           <div className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left space-y-2">
             <p>
-              © 2025 {" "}
+              © 2025{" "}
               <a
-                href="https://Creativesky.ai"
+                href="https://creativesky.ai/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-purple-500 transition-colors duration-200 underline"
               >
                 CreativeSky.AI
               </a>
-              
             </p>
             <p>Estimates based on 2025 tax laws and OBBBA; consult a tax professional.</p>
           </div>
 
-          {/* Social Icons */}
           <div className="flex items-center gap-4 sm:gap-6">
             <a
-              href="https://CreativSky.ai"
+              href="https://creativesky.ai/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-purple-500 transition-colors duration-200 hover:scale-110 p-2 -m-2"

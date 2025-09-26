@@ -1,24 +1,25 @@
 "use client"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { DollarSign, HelpCircle, Lightbulb } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { TrendingUp, HelpCircle } from "lucide-react"
 import { useState } from "react"
 
 interface RevenuePerformanceOutputProps {
-  calculations: {
-    grossMonthlyRevenue: number
-    netMonthlyIncome: number
-    annualNetIncome: number
-    adr: number
-    occupancyRate: number
+  results: {
     nightsBooked: number
     bookingsPerMonth: number
+    monthlyRevenue: number
+    annualRevenue: number
+    grossMonthlyRevenue: number
+    cleaningFeeRevenue: number
+    monthlyPlatformFees: number
   }
   showYearly: boolean
+  onToggleView: () => void
 }
 
-export function RevenuePerformanceOutput({ calculations, showYearly }: RevenuePerformanceOutputProps) {
+export function RevenuePerformanceOutput({ results, showYearly, onToggleView }: RevenuePerformanceOutputProps) {
   const [expandedHelp, setExpandedHelp] = useState<string | null>(null)
 
   const formatCurrency = (amount: number) => {
@@ -68,164 +69,90 @@ export function RevenuePerformanceOutput({ calculations, showYearly }: RevenuePe
   }
 
   return (
-    <Card className="transition-all duration-300 ease-in-out">
-      <CardHeader className="pb-4 sm:pb-5">
-        <CardTitle className="flex flex-col sm:flex-row sm:items-center gap-3 text-lg">
-          <div className="flex items-center gap-3">
-            <DollarSign className="h-5 w-5 text-green-600" />
-            <span>Revenue & Performance</span>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Revenue & Performance
           </div>
-          <Badge
-            variant="outline"
-            className="transition-all duration-300 ease-in-out text-sm self-start sm:self-center"
-          >
-            {formatCurrency(showYearly ? calculations.grossMonthlyRevenue * 12 : calculations.grossMonthlyRevenue)}/
-            {showYearly ? "year" : "month"}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">
+              {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}/
+              {showYearly ? "year" : "month"}
+            </Badge>
+            <Button variant="outline" size="sm" onClick={onToggleView}>
+              {showYearly ? "Monthly" : "Yearly"}
+            </Button>
+          </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6 sm:space-y-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          <div className="space-y-3 transition-all duration-300 ease-in-out">
-            <div className="flex items-start sm:items-center justify-between gap-3">
-              <span className="text-sm font-medium flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="truncate">Gross Revenue</span>
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("grossRevenue")}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-                  aria-label="Toggle Gross Revenue information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-lg sm:text-xl font-bold transition-all duration-300 ease-in-out flex-shrink-0 ${getValueColor(
-                  showYearly ? calculations.grossMonthlyRevenue * 12 : calculations.grossMonthlyRevenue,
-                  "revenue",
-                )}`}
-              >
-                {formatCurrency(showYearly ? calculations.grossMonthlyRevenue * 12 : calculations.grossMonthlyRevenue)}
-              </span>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Gross Revenue</span>
+            <button
+              onClick={() => toggleHelp("grossRevenue")}
+              className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
+              aria-label="Toggle Gross Revenue information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <span className={`text-sm font-medium ${getValueColor(results.grossMonthlyRevenue, "revenue")}`}>
+            {formatCurrency(showYearly ? results.grossMonthlyRevenue * 12 : results.grossMonthlyRevenue)}
+          </span>
+        </div>
+        <div className="text-xs text-muted-foreground">Total rental income before expenses</div>
+
+        {expandedHelp === "grossRevenue" && (
+          <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+            <strong>Gross Revenue Info:</strong> {tooltipContent.grossRevenue}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Net Revenue</span>
+            <button
+              onClick={() => toggleHelp("netCashFlow")}
+              className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
+              aria-label="Toggle Net Cash Flow information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <span className={`text-sm font-medium ${getValueColor(results.monthlyRevenue, "profit")}`}>
+            {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}
+          </span>
+        </div>
+        <div className="text-xs text-muted-foreground">Revenue after platform fees</div>
+
+        {expandedHelp === "netCashFlow" && (
+          <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+            <strong>Net Revenue Info:</strong> {tooltipContent.netCashFlow}
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-4 pt-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Nights Booked</span>
             </div>
-            <div className="text-xs text-muted-foreground">Total rental income before expenses</div>
-            {expandedHelp === "grossRevenue" && (
-              <div className="bg-muted/50 rounded-lg p-4 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Gross Revenue Info:</strong> {tooltipContent.grossRevenue}
-                </p>
-              </div>
-            )}
+            <div className="text-lg font-semibold text-green-600 dark:text-green-400">
+              {showYearly ? Math.round(results.nightsBooked * 12) : results.nightsBooked}
+            </div>
+            <div className="text-xs text-muted-foreground">{showYearly ? "nights/year" : "nights/month"}</div>
           </div>
 
-          <div className="space-y-3 transition-all duration-300 ease-in-out">
-            <div className="flex items-start sm:items-center justify-between gap-3">
-              <span className="text-sm font-medium flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="truncate">Net Cash Flow</span>
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("netCashFlow")}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-                  aria-label="Toggle Net Cash Flow information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-lg sm:text-xl font-bold transition-all duration-300 ease-in-out flex-shrink-0 ${getValueColor(
-                  showYearly ? calculations.annualNetIncome : calculations.netMonthlyIncome,
-                  "profit",
-                )}`}
-              >
-                {formatCurrency(showYearly ? calculations.annualNetIncome : calculations.netMonthlyIncome)}
-              </span>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Bookings</span>
             </div>
-            <div className="text-xs text-muted-foreground">Profit after all expenses</div>
-            {expandedHelp === "netCashFlow" && (
-              <div className="bg-muted/50 rounded-lg p-4 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Net Cash Flow Info:</strong> {tooltipContent.netCashFlow}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-3 transition-all duration-300 ease-in-out">
-            <div className="flex items-start sm:items-center justify-between gap-3">
-              <span className="text-sm font-medium flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="truncate">Average Daily Rate</span>
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("adr")}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-                  aria-label="Toggle Average Daily Rate information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-lg sm:text-xl font-bold transition-all duration-300 ease-in-out flex-shrink-0 ${getValueColor(calculations.adr, "revenue")}`}
-              >
-                {formatCurrency(calculations.adr)}
-              </span>
+            <div className="text-lg font-semibold text-green-600 dark:text-green-400">
+              {showYearly ? Math.round(results.bookingsPerMonth * 12) : results.bookingsPerMonth}
             </div>
-            <div className="text-xs text-muted-foreground transition-all duration-300 ease-in-out">
-              Revenue per occupied night
-            </div>
-            {expandedHelp === "adr" && (
-              <div className="bg-muted/50 rounded-lg p-4 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Average Daily Rate Info:</strong> {tooltipContent.adr}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-3 transition-all duration-300 ease-in-out">
-            <div className="flex items-start sm:items-center justify-between gap-3">
-              <span className="text-sm font-medium flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="truncate">Occupancy Rate</span>
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("occupancy")}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 p-1 -m-1"
-                  aria-label="Toggle Occupancy Rate information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-lg sm:text-xl font-bold transition-all duration-300 ease-in-out flex-shrink-0 ${getValueColor(calculations.occupancyRate, "rate")}`}
-              >
-                {formatPercent(calculations.occupancyRate)}
-              </span>
-            </div>
-            <div className="text-xs text-muted-foreground transition-all duration-300 ease-in-out">
-              <div className="flex flex-col sm:flex-row sm:gap-2">
-                <span>
-                  {showYearly
-                    ? `${Math.round((365 * calculations.occupancyRate) / 100)} nights/year`
-                    : `${Math.round((30 * calculations.occupancyRate) / 100)} nights/month`}
-                </span>
-                <span className="hidden sm:inline">•</span>
-                <span>
-                  {showYearly
-                    ? `${(calculations.bookingsPerMonth * 12).toFixed(0)} bookings/year`
-                    : `${calculations.bookingsPerMonth} bookings/month`}
-                </span>
-              </div>
-            </div>
-            {expandedHelp === "occupancy" && (
-              <div className="bg-muted/50 rounded-lg p-4 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Occupancy Rate Info:</strong> {tooltipContent.occupancy}
-                </p>
-              </div>
-            )}
+            <div className="text-xs text-muted-foreground">{showYearly ? "bookings/year" : "bookings/month"}</div>
           </div>
         </div>
       </CardContent>

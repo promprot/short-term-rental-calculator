@@ -1,8 +1,16 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+
 import "./globals.css"
 import { Suspense } from "react"
+
+import { Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
+import { Inter, Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
+
+// Initialize fonts
+V0_Font_Geist({ weight: ["100","200","300","400","500","600","700","800","900"] })
+V0_Font_Geist_Mono({ weight: ["100","200","300","400","500","600","700","800","900"] })
+V0_Font_Source_Serif_4({ weight: ["200","300","400","500","600","700","800","900"] })
 
 const inter = Inter({
   subsets: ["latin"],
@@ -158,47 +166,9 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="canonical" href="https://str-calculator.vercel.app" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
-        />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="googlebot" content="index, follow" />
-        <meta name="bingbot" content="index, follow" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
-
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
-        <link rel="apple-touch-icon-precomposed" href="/apple-icon-precomposed.png" />
-        <link rel="icon" type="image/png" sizes="36x36" href="/android-icon-36x36.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/android-icon-48x48.png" />
-        <link rel="icon" type="image/png" sizes="72x72" href="/android-icon-72x72.png" />
-        <link rel="icon" type="image/png" sizes="144x144" href="/android-icon-144x144.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
-        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="theme-color" content="#3b82f6" />
-      </head>
-      <body className={`font-sans ${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} antialiased`}>
+      <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
       </body>
     </html>

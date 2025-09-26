@@ -62,8 +62,10 @@ A comprehensive financial analysis tool for short-term rental property investmen
 This repository includes comprehensive documentation to help developers, investors, and tax professionals understand and utilize the calculator:
 
 ### 🧮 [Technical Calculations Guide](./TECHNICAL_CALCULATIONS_GUIDE.md)
-**Purpose**: Deep dive into the mathematical foundations of the calculator  
-**Contents**: 
+
+**Purpose**: Deep dive into the mathematical foundations of the calculator
+
+**Contents**:
 - Revenue and expense calculation formulas
 - Investment performance metrics (ROI, Cap Rate, Cash-on-Cash Return)
 - Tax benefit calculations including 2025 Trump tax reforms
@@ -72,7 +74,9 @@ This repository includes comprehensive documentation to help developers, investo
 - Practical examples with step-by-step calculations
 
 ### 🌐 [SEO & Sharing Documentation](./SEO_AND_SHARING_DOCUMENTATION.md)
-**Purpose**: Technical implementation guide for web optimization  
+
+**Purpose**: Technical implementation guide for web optimization
+
 **Contents**:
 - Complete icon and favicon implementation across all platforms
 - Social media sharing optimization (Open Graph, Twitter Cards)

@@ -1,21 +1,22 @@
 "use client"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Home, HelpCircle, Lightbulb } from "lucide-react"
+import { Home, HelpCircle } from "lucide-react"
 import { useState } from "react"
 
 interface InvestmentPerformanceOutputProps {
-  calculations: {
-    capRate: number
+  results: {
+    netOperatingIncome: number
+    annualCashFlow: number
+    roi: number
     cashOnCashReturn: number
-    totalStartupCosts: number
+    capRate: number
     breakEvenMonths: number
+    totalCashInvested: number
   }
-  showYearly: boolean
 }
 
-export function InvestmentPerformanceOutput({ calculations, showYearly }: InvestmentPerformanceOutputProps) {
+export function InvestmentPerformanceOutput({ results }: InvestmentPerformanceOutputProps) {
   const [expandedHelp, setExpandedHelp] = useState<string | null>(null)
 
   const formatCurrency = (amount: number) => {
@@ -68,143 +69,113 @@ export function InvestmentPerformanceOutput({ calculations, showYearly }: Invest
   }
 
   return (
-    <Card className="transition-all duration-300 ease-in-out">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Home className="h-5 w-5 text-blue-600" />
-          Investment Performance Metrics
-          <Badge variant="outline" className="transition-all duration-300 ease-in-out text-sm">
-            {formatPercent(calculations.capRate)} Cap Rate
-          </Badge>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5" />
+            Investment Performance Metrics
+          </div>
+          <Badge variant={results.roi > 10 ? "default" : "secondary"}>{formatPercent(results.roi)} ROI</Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-2 transition-all duration-300 ease-in-out">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium flex items-center gap-2">
-                Cap Rate
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("capRate")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Cap Rate information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-xl font-bold transition-all duration-300 ease-in-out ${getValueColor(calculations.capRate, "rate")}`}
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Cap Rate</span>
+              <button
+                onClick={() => toggleHelp("capRate")}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Toggle Cap Rate information"
               >
-                {formatPercent(calculations.capRate)}
-              </span>
+                <HelpCircle className="h-4 w-4" />
+              </button>
+            </div>
+            <div className={`text-lg font-semibold ${getValueColor(results.capRate, "rate")}`}>
+              {formatPercent(results.capRate)}
             </div>
             <div className="text-xs text-muted-foreground">NOI ÷ Property Value</div>
+
             {expandedHelp === "capRate" && (
-              <div className="bg-muted/50 rounded-lg p-3 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs text-muted-foreground">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Cap Rate Info:</strong> {tooltipContent.capRate}
-                </p>
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+                <strong>Cap Rate Info:</strong> {tooltipContent.capRate}
               </div>
             )}
           </div>
 
-          <div className="space-y-2 transition-all duration-300 ease-in-out">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium flex items-center gap-2">
-                Cash-on-Cash Return
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("cashOnCash")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Cash-on-Cash Return information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-xl font-bold transition-all duration-300 ease-in-out ${getValueColor(calculations.cashOnCashReturn, "rate")}`}
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Cash-on-Cash Return</span>
+              <button
+                onClick={() => toggleHelp("cashOnCash")}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Toggle Cash-on-Cash Return information"
               >
-                {formatPercent(calculations.cashOnCashReturn)}
-              </span>
+                <HelpCircle className="h-4 w-4" />
+              </button>
+            </div>
+            <div className={`text-lg font-semibold ${getValueColor(results.cashOnCashReturn, "rate")}`}>
+              {formatPercent(results.cashOnCashReturn)}
             </div>
             <div className="text-xs text-muted-foreground">Annual return on invested capital</div>
+
             {expandedHelp === "cashOnCash" && (
-              <div className="bg-muted/50 rounded-lg p-3 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs text-muted-foreground">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Cash-on-Cash Return Info:</strong> {tooltipContent.cashOnCash}
-                </p>
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+                <strong>Cash-on-Cash Return Info:</strong> {tooltipContent.cashOnCash}
               </div>
             )}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Total Investment</span>
+            <button
+              onClick={() => toggleHelp("totalInvestment")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Toggle Total Investment information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <div className={`text-lg font-semibold ${getValueColor(results.totalCashInvested, "expense")}`}>
+            {formatCurrency(results.totalCashInvested)}
+          </div>
+          <div className="text-xs text-muted-foreground">Initial capital required</div>
+
+          {expandedHelp === "totalInvestment" && (
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+              <strong>Total Investment Info:</strong> {tooltipContent.totalInvestment}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Break-Even Timeline</span>
+            <button
+              onClick={() => toggleHelp("breakEven")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Toggle Break-Even Timeline information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <div className={`text-lg font-semibold ${getValueColor(results.breakEvenMonths, "timeline")}`}>
+            {results.breakEvenMonths > 0 ? `${results.breakEvenMonths.toFixed(1)} months` : "Never"}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {results.breakEvenMonths > 0
+              ? `${(results.breakEvenMonths / 12).toFixed(1)} years to break even`
+              : "Negative cash flow"}
           </div>
 
-          <div className="space-y-2 transition-all duration-300 ease-in-out">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium flex items-center gap-2">
-                Total Investment
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("totalInvestment")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Total Investment information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-xl font-bold transition-all duration-300 ease-in-out ${getValueColor(calculations.totalStartupCosts, "expense")}`}
-              >
-                {formatCurrency(calculations.totalStartupCosts)}
-              </span>
+          {expandedHelp === "breakEven" && (
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+              <strong>Break-Even Timeline Info:</strong> {tooltipContent.breakEven}
             </div>
-            <div className="text-xs text-muted-foreground">Initial capital required</div>
-            {expandedHelp === "totalInvestment" && (
-              <div className="bg-muted/50 rounded-lg p-3 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs text-muted-foreground">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Total Investment Info:</strong> {tooltipContent.totalInvestment}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-2 transition-all duration-300 ease-in-out">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium flex items-center gap-2">
-                Break-Even Timeline
-                <button
-                  type="button"
-                  onClick={() => toggleHelp("breakEven")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Break-Even Timeline information"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </span>
-              <span
-                className={`text-xl font-bold transition-all duration-300 ease-in-out ${getValueColor(calculations.breakEvenMonths, "timeline")}`}
-              >
-                {showYearly
-                  ? `${(calculations.breakEvenMonths / 12).toFixed(1)} years`
-                  : `${calculations.breakEvenMonths.toFixed(1)} months`}
-              </span>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {showYearly
-                ? `${calculations.breakEvenMonths.toFixed(1)} months to break even`
-                : `${(calculations.breakEvenMonths / 12).toFixed(1)} years to break even`}
-            </div>
-            {expandedHelp === "breakEven" && (
-              <div className="bg-muted/50 rounded-lg p-3 border border-dashed animate-in slide-in-from-top-2 duration-200">
-                <p className="text-xs text-muted-foreground">
-                  <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-                  <strong>Break-Even Timeline Info:</strong> {tooltipContent.breakEven}
-                </p>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -1,10 +1,8 @@
 "use client"
-
 import type React from "react"
-
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Lightbulb, HelpCircle } from "lucide-react"
+import { HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
@@ -55,24 +53,34 @@ export function InputField({
     if (!isFocused) {
       const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
       if (prefix === "$" && numValue > 0) {
-        setDisplayValue(formatCurrency(numValue))
+        const formatted = formatCurrency(numValue)
+        setDisplayValue(formatted)
+      } else if (prefix === "$") {
+        setDisplayValue("")
       } else {
         setDisplayValue(value.toString())
       }
     }
   }, [value, isFocused, prefix])
 
+  useEffect(() => {
+    const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
+    if (prefix === "$" && numValue > 0) {
+      setDisplayValue(formatCurrency(numValue))
+    } else if (prefix === "$") {
+      setDisplayValue("")
+    } else {
+      setDisplayValue(value.toString())
+    }
+  }, [])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
 
     if (prefix === "$") {
-      // Allow typing numbers, commas, and decimal points
       const cleanValue = inputValue.replace(/[^0-9.,]/g, "")
       setDisplayValue(cleanValue)
-
-      // Parse and send numeric value to parent
-      const numericValue = parseCurrency(cleanValue)
-      onChange(numericValue.toString())
+      // Don't call onChange here - only on blur to prevent feedback loop
     } else {
       setDisplayValue(inputValue)
       onChange(inputValue)
@@ -82,7 +90,6 @@ export function InputField({
   const handleFocus = () => {
     setIsFocused(true)
     if (prefix === "$") {
-      // Show raw numeric value for editing
       const numValue = typeof value === "string" ? Number.parseFloat(value) || 0 : value
       setDisplayValue(numValue > 0 ? numValue.toString() : "")
     }
@@ -91,27 +98,24 @@ export function InputField({
   const handleBlur = () => {
     setIsFocused(false)
     if (prefix === "$") {
-      // Format for display
       const numValue = parseCurrency(displayValue)
+      onChange(numValue.toString())
+
+      // Format for display
       if (numValue > 0) {
         setDisplayValue(formatCurrency(numValue))
-        onChange(numValue.toString())
       } else {
         setDisplayValue("")
-        onChange("0")
       }
     }
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
-      <div className="flex items-center gap-2.5">
-        <Label htmlFor={label.replace(/\s+/g, "-").toLowerCase()} className="text-sm font-medium text-foreground">
-          {label}
-        </Label>
+    <div className={cn("space-y-2", className)}>
+      <div className="flex items-center gap-2">
+        <Label htmlFor={label.replace(/\s+/g, "-").toLowerCase()}>{label}</Label>
         {description && (
           <button
-            type="button"
             onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label={`Toggle ${label} information`}
@@ -120,36 +124,23 @@ export function InputField({
           </button>
         )}
       </div>
-
       <div className="relative">
-        {prefix && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">{prefix}</span>
-        )}
+        {prefix && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{prefix}</div>}
         <Input
           id={label.replace(/\s+/g, "-").toLowerCase()}
-          type="text"
+          type={type}
           value={displayValue}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className={cn(
-            "bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-400",
-            prefix && "pl-8",
-            suffix && "pr-12",
-          )}
+          className={cn(prefix && "pl-8", suffix && "pr-8")}
         />
-        {suffix && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">{suffix}</span>
-        )}
+        {suffix && <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">{suffix}</div>}
       </div>
-
       {description && isDescriptionExpanded && (
-        <div className="bg-muted/50 rounded-lg p-4 border border-dashed animate-in slide-in-from-top-2 duration-200">
-          <p className="text-xs text-muted-foreground">
-            <Lightbulb className="inline h-3 w-3 mr-1 text-yellow-400" />
-            <strong>{label} Info:</strong> {description}
-          </p>
+        <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+          <strong>{label} Info:</strong> {description}
         </div>
       )}
     </div>
