@@ -4,12 +4,30 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Suspense } from "react"
 
+const geist = V0_Font_Geist({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-geist",
+})
+
 import { Inter, Roboto, Roboto_Mono, Source_Serif_4, Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
 
 // Initialize fonts
 V0_Font_Geist({ weight: ["100","200","300","400","500","600","700","800","900"] })
 V0_Font_Geist_Mono({ weight: ["100","200","300","400","500","600","700","800","900"] })
 V0_Font_Source_Serif_4({ weight: ["200","300","400","500","600","700","800","900"] })
+
+const geistMono = Roboto_Mono({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+})
+
+const sourceSerifV0 = V0_Font_Source_Serif_4({
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-source-serif-v0",
+})
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -174,9 +192,11 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable} antialiased`}
+      className={`${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable} ${geist.variable} ${geistMono.variable} ${sourceSerifV0.variable} antialiased`}
     >
-      <body className={`font-sans ${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable}`}>
+      <body
+        className={`font-sans ${inter.variable} ${roboto.variable} ${robotoMono.variable} ${sourceSerif.variable} ${geist.variable} ${geistMono.variable} ${sourceSerifV0.variable}`}
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
