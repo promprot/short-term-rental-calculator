@@ -12,7 +12,7 @@ export function Footer() {
                 href="https://creativesky.ai/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary transition-colors duration-200 underline"
+                className="hover:text-purple-500 transition-colors duration-200 underline"
               >
                 CreativeSky.AI
               </a>
@@ -25,7 +25,7 @@ export function Footer() {
               href="https://creativesky.ai/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 p-2 -m-2"
+              className="text-muted-foreground hover:text-purple-500 transition-colors duration-200 hover:scale-110 p-2 -m-2"
               aria-label="Visit our website"
             >
               <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -34,7 +34,7 @@ export function Footer() {
               href="https://x.com/CreativeSkyAI"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 p-2 -m-2"
+              className="text-muted-foreground hover:text-purple-500 transition-colors duration-200 hover:scale-110 p-2 -m-2"
               aria-label="Follow us on X"
             >
               <X className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -43,14 +43,14 @@ export function Footer() {
               href="https://github.com/promprot"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 p-2 -m-2"
+              className="text-muted-foreground hover:text-purple-500 transition-colors duration-200 hover:scale-110 p-2 -m-2"
               aria-label="View our GitHub"
             >
               <Github className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
             <a
               href="#"
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 hover:scale-110 p-2 -m-2"
+              className="text-muted-foreground hover:text-purple-500 transition-colors duration-200 hover:scale-110 p-2 -m-2"
               aria-label="Contact us"
             >
               <Mail className="h-4 w-4 sm:h-5 sm:w-5" />

@@ -65,7 +65,7 @@ export function SliderField({
             isDescriptionOpen ? "block" : "hidden",
           )}
         >
-          {description}
+          <strong>{label} Info:</strong> {description}
         </div>
       )}
     </div>

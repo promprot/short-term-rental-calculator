@@ -33,10 +33,8 @@ export function TaxBenefitsSection({ data, onChange, isOpen, onToggle }: TaxBene
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <Calculator className="h-4 w-4 text-primary" />
-            </div>
-            Benefits
+            <Calculator className="h-5 w-5" />
+            Tax Benefits
           </div>
           <Button variant="ghost" size="sm" onClick={onToggle}>
             {isOpen ? "Collapse" : "Expand"}
@@ -110,8 +108,9 @@ export function TaxBenefitsSection({ data, onChange, isOpen, onToggle }: TaxBene
               </Select>
               {isHoursDescriptionOpen && (
                 <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-                  Material participation allows STR losses to offset other income. Requires 500+ hours annually OR 100+
-                  hours with no one else participating more. Spouse hours count toward your total participation time.
+                  <strong>Material Participation Info:</strong> Material participation allows STR losses to offset other
+                  income. Requires 500+ hours annually OR 100+ hours with no one else participating more. Spouse hours
+                  count toward your total participation time.
                 </div>
               )}
             </div>

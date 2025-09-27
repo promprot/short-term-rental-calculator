@@ -15,30 +15,29 @@ interface CalculatorData {
   // Revenue data
   averageNightlyRate: number
   occupancyRate: number
-  // Operating costs data
-  cleaningFee: number // Moved cleaningFee from revenue to costs section
+  cleaningFee: number
   managementFee: number
-  platformFees: number
+  platformFees: number // Added platform fees
   lodgingTax: number
   propertyTax: number
+  cleaningFees: number
   maintenance: number
   insurance: number
   utilities: number
   hoaFees: number
   other: number
-  // Investment property data
+  // Startup data
   purchasePrice: number
   downPayment: number
-  closingCosts: number
-  interestRate: number
+  closingCosts: number // Added closing costs field
+  interestRate: number // Added interest rate
   renovation: number
   furnishing: number
-  loanTerm: number
-  // Tax benefits data
   annualIncome: number
   federalTaxRate: number
   spouseHours: number
   materialParticipation: boolean
+  loanTerm: number
 }
 
 export default function STRCalculator() {
@@ -61,32 +60,31 @@ export default function STRCalculator() {
 
   const [data, setData] = useState<CalculatorData>({
     // Revenue defaults
-    averageNightlyRate: 200,
+    averageNightlyRate: 200, // Updated default nightly rate from 150 to 200
     occupancyRate: 65,
-    // Operating costs defaults
-    cleaningFee: 125, // Moved cleaningFee default to costs section
+    cleaningFee: 125, // Updated cleaning fee from $75 to $125 for more accurate market rate
     managementFee: 0,
-    platformFees: 3,
+    platformFees: 3, // Default 3% for Airbnb host fee
     lodgingTax: 2400,
     propertyTax: 4800,
-    maintenance: 0,
+    cleaningFees: 125, // Now represents cleaning fee per stay, not annual cost
+    maintenance: 0, // Set maintenance cost to $0
     insurance: 2400,
     utilities: 0,
     hoaFees: 0,
     other: 0,
-    // Investment property defaults
-    purchasePrice: 300000,
-    downPayment: 60000,
-    closingCosts: 15000,
-    interestRate: 6.5,
-    renovation: 0,
-    furnishing: 0,
-    loanTerm: 30,
-    // Tax benefits defaults
-    annualIncome: 400000,
-    federalTaxRate: 37,
-    spouseHours: 500,
-    materialParticipation: true,
+    // Startup defaults
+    purchasePrice: 300000, // Set purchase price to $300,000
+    downPayment: 60000, // Set down payment to $60,000
+    closingCosts: 15000, // Set closing costs to $15,000
+    interestRate: 6.5, // Updated interest rate from 7.5% to 6.5%
+    renovation: 0, // Updated renovation from 50000 to 0
+    furnishing: 0, // Updated furnishing from 50000 to 0
+    annualIncome: 400000, // $400k annual income
+    federalTaxRate: 37, // 37% tax bracket for $400k income
+    spouseHours: 500, // Default to 500 hours for material participation
+    materialParticipation: true, // Default to qualifying for material participation
+    loanTerm: 30, // Default 30-year loan term
   })
 
   const updateData = (field: string, value: number | boolean) => {
@@ -97,11 +95,11 @@ export default function STRCalculator() {
     setOpenSections((prev) => {
       const newSections = new Set(prev)
       if (newSections.has(section)) {
-        newSections.delete(section)
+        // If closing a section, close all sections
+        return new Set()
       } else {
-        newSections.add(section)
+        return new Set([section])
       }
-      return newSections
     })
   }
 
@@ -116,11 +114,10 @@ export default function STRCalculator() {
     const cleaningFeeRevenue = bookingsPerMonth * data.cleaningFee
     const grossMonthlyRevenue = nightlyRevenue + cleaningFeeRevenue
     const monthlyPlatformFees = (grossMonthlyRevenue * data.platformFees) / 100
+    const monthlyRevenue = grossMonthlyRevenue - monthlyPlatformFees
+    const annualRevenue = monthlyRevenue * 12
 
-    const revenueAfterPlatformFees = grossMonthlyRevenue - monthlyPlatformFees
-    const annualRevenueAfterPlatformFees = revenueAfterPlatformFees * 12
-
-    const managementFeeAmount = (annualRevenueAfterPlatformFees * data.managementFee) / 100
+    const managementFeeAmount = (annualRevenue * data.managementFee) / 100
     const annualUtilities = data.utilities * 12
     const actualCleaningCosts = bookingsPerMonth * 12 * 75 // Assume $75 actual cost per cleaning
 
@@ -144,31 +141,19 @@ export default function STRCalculator() {
       loanAmount > 0 && monthlyInterestRate > 0
         ? (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
           (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1)
-        : loanAmount > 0 && monthlyInterestRate === 0
-          ? loanAmount / numberOfPayments // Handle 0% interest rate
-          : 0
+        : 0
 
     const annualMortgagePayments = monthlyMortgagePayment * 12
-
-    const netOperatingIncome = grossMonthlyRevenue * 12 - totalAnnualOperatingCosts
-    const monthlyNetOperatingIncome = netOperatingIncome / 12
-
+    const netOperatingIncome = annualRevenue - totalAnnualOperatingCosts
     const annualCashFlow = netOperatingIncome - annualMortgagePayments
-    const monthlyCashFlow = annualCashFlow / 12
 
     // Investment metrics
     const totalCashInvested = data.downPayment + data.closingCosts + data.renovation + data.furnishing
-
     const roi = totalCashInvested > 0 ? (annualCashFlow / totalCashInvested) * 100 : 0
     const cashOnCashReturn = totalCashInvested > 0 ? (annualCashFlow / totalCashInvested) * 100 : 0
     const capRate = data.purchasePrice > 0 ? (netOperatingIncome / data.purchasePrice) * 100 : 0
 
-    const breakEvenMonths =
-      annualCashFlow > 0 && totalCashInvested > 0
-        ? totalCashInvested / (annualCashFlow / 12)
-        : annualCashFlow <= 0
-          ? Number.POSITIVE_INFINITY
-          : 0
+    const breakEvenMonths = annualCashFlow > 0 ? totalCashInvested / (annualCashFlow / 12) : Number.POSITIVE_INFINITY
 
     const depreciationBasis = data.purchasePrice * 0.8 // 80% of purchase price (excluding land)
     const annualDepreciation = depreciationBasis / 27.5 // 27.5-year schedule for residential rental
@@ -182,40 +167,43 @@ export default function STRCalculator() {
     // Material participation requires 500+ hours OR 100+ hours with no one else participating more
     const qualifiesForMaterialParticipation = data.materialParticipation && data.spouseHours >= 100
 
-    // QBI calculation - only applies to positive business income with material participation
-    const netBusinessIncome = netOperatingIncome - annualDepreciation // Business income after regular depreciation
-    const qbiEligibleIncome = qualifiesForMaterialParticipation && netBusinessIncome > 0 ? netBusinessIncome : 0
-    const qbiDeduction = qbiEligibleIncome * 0.2 // 20% QBI deduction (permanent under 2025 reforms)
+    // Calculate net rental income BEFORE depreciation for QBI purposes
+    const netRentalIncomeBeforeDepreciation = netOperatingIncome
+
+    // QBI calculation - applies to positive rental income when materially participating
+    // QBI is calculated on income BEFORE depreciation deductions
+    const qbiEligibleIncome =
+      qualifiesForMaterialParticipation && netRentalIncomeBeforeDepreciation > 0 ? netRentalIncomeBeforeDepreciation : 0
+    const qbiDeduction = qbiEligibleIncome * 0.2 // 20% QBI deduction
+
+    // Calculate taxable rental income after depreciation
+    const taxableRentalIncome = Math.max(0, netOperatingIncome - totalFirstYearDepreciation)
 
     // Passive loss limitation calculation
-    const totalTaxableIncome = netOperatingIncome - totalFirstYearDepreciation
+    const rentalLoss = Math.min(0, netOperatingIncome - totalFirstYearDepreciation)
     const passiveLossLimitation = qualifiesForMaterialParticipation
-      ? 0 // No limitation with material participation
-      : Math.max(0, -totalTaxableIncome) // Passive losses limited if no material participation
+      ? 0 // No limitation with material participation - can use full loss
+      : Math.abs(rentalLoss) // Passive losses limited if no material participation
 
-    // Calculate allowable deductions
-    const allowableDepreciationDeduction = totalFirstYearDepreciation - passiveLossLimitation
+    // Calculate allowable deductions (what can actually be used to reduce taxes)
+    const allowableDepreciationDeduction = qualifiesForMaterialParticipation
+      ? totalFirstYearDepreciation // Can use full depreciation with material participation
+      : Math.max(0, totalFirstYearDepreciation - Math.abs(rentalLoss)) // Limited by passive loss rules
 
-    // Tax savings calculation
+    // Tax savings calculation - only on deductions that can actually be used
     const depreciationTaxSavings = allowableDepreciationDeduction * (data.federalTaxRate / 100)
     const qbiTaxSavings = qbiDeduction * (data.federalTaxRate / 100)
-    const taxSavings = depreciationTaxSavings + qbiTaxSavings
-
-    const taxableRentalIncome = Math.max(0, netOperatingIncome - allowableDepreciationDeduction)
+    const totalTaxSavings = depreciationTaxSavings + qbiTaxSavings
 
     return {
       // Revenue metrics
       nightsBooked,
       bookingsPerMonth,
-      monthlyRevenue: revenueAfterPlatformFees, // Revenue after platform fees only
-      annualRevenue: annualRevenueAfterPlatformFees, // Revenue after platform fees only
+      monthlyRevenue,
+      annualRevenue,
       grossMonthlyRevenue,
       cleaningFeeRevenue,
       monthlyPlatformFees,
-      monthlyNetOperatingIncome, // Added this property that was missing
-      annualNetOperatingIncome: netOperatingIncome, // Added this property that was missing
-      monthlyCashFlow, // Net cash flow after all expenses including mortgage
-      annualCashFlow, // Net cash flow after all expenses including mortgage
 
       // Expense metrics
       totalAnnualOperatingCosts,
@@ -239,7 +227,7 @@ export default function STRCalculator() {
       bonusDepreciation,
       totalFirstYearDepreciation,
       qbiDeduction,
-      taxSavings,
+      taxSavings: totalTaxSavings, // Use corrected total tax savings
       taxableRentalIncome,
       passiveLossLimitation,
     }
@@ -259,9 +247,8 @@ export default function STRCalculator() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-balance">Short Term Rental Calculator</h1>
-                <p className="text-sm text-muted-foreground text-pretty max-w-2xl">
-                  Calculate Airbnb and VRBO investment returns and operating costs. Analyze revenue potential, operating
-                  costs, tax benefits, and ROI for your vacation rental property investment.
+                <p className="text-sm text-muted-foreground text-pretty">
+                  Analyze your investment potential with comprehensive financial projections
                 </p>
               </div>
             </div>
@@ -284,19 +271,20 @@ export default function STRCalculator() {
               data={{
                 averageNightlyRate: data.averageNightlyRate,
                 occupancyRate: data.occupancyRate,
+                cleaningFee: data.cleaningFee,
               }}
               onChange={updateData}
-              isOpen={openSections.has("rental")}
-              onToggle={() => handleSectionToggle("rental")}
+              isOpen={openSections.has("revenue")}
+              onToggle={() => handleSectionToggle("revenue")}
             />
 
             <CostsSection
               data={{
-                cleaningFee: data.cleaningFee, // Added cleaningFee to costs section data
                 managementFee: data.managementFee,
                 platformFees: data.platformFees,
                 lodgingTax: data.lodgingTax,
                 propertyTax: data.propertyTax,
+                cleaningFees: data.cleaningFees,
                 maintenance: data.maintenance,
                 insurance: data.insurance,
                 utilities: data.utilities,
@@ -319,8 +307,8 @@ export default function STRCalculator() {
                 loanTerm: data.loanTerm,
               }}
               onChange={updateData}
-              isOpen={openSections.has("property")}
-              onToggle={() => handleSectionToggle("property")}
+              isOpen={openSections.has("startup")}
+              onToggle={() => handleSectionToggle("startup")}
             />
 
             <TaxBenefitsSection
@@ -331,8 +319,8 @@ export default function STRCalculator() {
                 materialParticipation: data.materialParticipation,
               }}
               onChange={updateData}
-              isOpen={openSections.has("benefits")}
-              onToggle={() => handleSectionToggle("benefits")}
+              isOpen={openSections.has("tax")}
+              onToggle={() => handleSectionToggle("tax")}
             />
           </div>
 
@@ -347,10 +335,6 @@ export default function STRCalculator() {
                 grossMonthlyRevenue: results.grossMonthlyRevenue,
                 cleaningFeeRevenue: results.cleaningFeeRevenue,
                 monthlyPlatformFees: results.monthlyPlatformFees,
-                monthlyNetOperatingIncome: results.monthlyNetOperatingIncome,
-                annualNetOperatingIncome: results.annualNetOperatingIncome,
-                monthlyCashFlow: results.monthlyCashFlow,
-                annualCashFlow: results.annualCashFlow,
               }}
               showYearly={showYearly}
               onToggleView={() => setShowYearly(!showYearly)}

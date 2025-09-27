@@ -35,10 +35,8 @@ export function StartupSection({ data, onChange, isOpen, onToggle }: StartupSect
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <Home className="h-4 w-4 text-primary" />
-            </div>
-            Property
+            <Home className="h-5 w-5" />
+            Investment Property
           </div>
           <Button variant="ghost" size="sm" onClick={onToggle}>
             {isOpen ? "Collapse" : "Expand"}
@@ -124,8 +122,9 @@ export function StartupSection({ data, onChange, isOpen, onToggle }: StartupSect
               </Select>
               {isLoanTermDescriptionOpen && (
                 <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-                  15-year loans have higher monthly payments but lower total interest. 30-year loans improve cash flow
-                  but cost more over time. Choose based on your cash flow needs and investment strategy.
+                  <strong>Loan Term Info:</strong> 15-year loans have higher monthly payments but lower total interest.
+                  30-year loans improve cash flow but cost more over time. Choose based on your cash flow needs and
+                  investment strategy.
                 </div>
               )}
             </div>

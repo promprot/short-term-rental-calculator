@@ -9,6 +9,7 @@ interface RevenueSectionProps {
   data: {
     averageNightlyRate: number
     occupancyRate: number
+    cleaningFee: number
   }
   onChange: (field: string, value: number) => void
   isOpen: boolean
@@ -21,10 +22,8 @@ export function RevenueSection({ data, onChange, isOpen, onToggle }: RevenueSect
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <DollarSign className="h-4 w-4 text-primary" />
-            </div>
-            Rental
+            <DollarSign className="h-5 w-5" />
+            Rental Details
           </div>
           <Button variant="ghost" size="sm" onClick={onToggle}>
             {isOpen ? "Collapse" : "Expand"}
@@ -35,7 +34,7 @@ export function RevenueSection({ data, onChange, isOpen, onToggle }: RevenueSect
       {!isOpen && (
         <CardContent>
           <div className="text-sm text-muted-foreground">
-            ${data.averageNightlyRate}/night • {data.occupancyRate}% occupancy
+            ${data.averageNightlyRate}/night • {data.occupancyRate}% occupancy • ${data.cleaningFee} cleaning fee
           </div>
         </CardContent>
       )}
@@ -48,6 +47,14 @@ export function RevenueSection({ data, onChange, isOpen, onToggle }: RevenueSect
             prefix="$"
             description="Your base nightly rate before fees. Research comparable properties within 2-3 miles using AirDNA, Mashvisor, or Airbnb searches. This calculator assumes a minimum 2-night stay requirement to reduce turnover costs and attract quality guests."
             placeholder="200"
+          />
+          <InputField
+            label="Cleaning Fee per Stay"
+            value={data.cleaningFee}
+            onChange={(value) => onChange("cleaningFee", Number.parseFloat(value) || 0)}
+            prefix="$"
+            description="One-time cleaning fee charged per booking (minimum 2 nights). Set competitively: Studio/1BR: $75-125, 2-3BR: $100-175, 4+BR: $150-300. Actual cleaning costs are calculated separately based on your occupancy rate."
+            placeholder="75"
           />
 
           <SliderField

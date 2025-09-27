@@ -98,7 +98,7 @@ export function InputField({
       </div>
       {description && isDescriptionExpanded && (
         <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-          {description}
+          <strong>{label} Info:</strong> {description}
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { HelpCircle, TrendingUp, DollarSign, Clock } from "lucide-react"
+import { Home, HelpCircle } from "lucide-react"
 import { useState } from "react"
 
 interface InvestmentPerformanceOutputProps {
@@ -35,71 +35,21 @@ export function InvestmentPerformanceOutput({ results }: InvestmentPerformanceOu
   const getValueColor = (value: number, type: "rate" | "expense" | "timeline") => {
     switch (type) {
       case "rate":
-        if (value >= 15) return "text-blue-600"
-        if (value >= 10) return "text-blue-500"
-        if (value >= 6) return "text-teal-600"
-        if (value >= 3) return "text-yellow-600"
-        return "text-red-500"
+        if (value >= 15) return "text-green-600 dark:text-green-400"
+        if (value >= 10) return "text-green-600 dark:text-green-400"
+        if (value >= 6) return "text-green-600 dark:text-green-400"
+        if (value >= 3) return "text-green-600 dark:text-green-400"
+        return "text-red-600 dark:text-red-400"
       case "expense":
-        return "text-blue-700"
+        return "text-red-600 dark:text-red-400"
       case "timeline":
-        if (value <= 12) return "text-blue-600"
-        if (value <= 24) return "text-teal-600"
-        if (value <= 36) return "text-yellow-600"
-        if (value <= 60) return "text-orange-500"
-        return "text-red-500"
+        if (value <= 12) return "text-green-600 dark:text-green-400"
+        if (value <= 24) return "text-green-600 dark:text-green-400"
+        if (value <= 36) return "text-green-600 dark:text-green-400"
+        if (value <= 60) return "text-red-600 dark:text-red-400"
+        return "text-red-600 dark:text-red-400"
       default:
         return "text-foreground"
-    }
-  }
-
-  const getPerformanceBadge = (value: number, type: "rate" | "timeline") => {
-    if (type === "rate") {
-      if (value >= 15)
-        return {
-          label: "Excellent",
-          variant: "default" as const,
-          className: "bg-blue-100 text-blue-700",
-        }
-      if (value >= 10)
-        return {
-          label: "Very Good",
-          variant: "default" as const,
-          className: "bg-blue-50 text-blue-600",
-        }
-      if (value >= 6)
-        return {
-          label: "Good",
-          variant: "default" as const,
-          className: "bg-teal-100 text-teal-700",
-        }
-      if (value >= 3)
-        return {
-          label: "Fair",
-          variant: "default" as const,
-          className: "bg-yellow-100 text-yellow-700",
-        }
-      return { label: "Poor", variant: "destructive" as const, className: "" }
-    } else {
-      if (value <= 12)
-        return {
-          label: "Excellent",
-          variant: "default" as const,
-          className: "bg-blue-100 text-blue-700",
-        }
-      if (value <= 24)
-        return {
-          label: "Good",
-          variant: "default" as const,
-          className: "bg-teal-100 text-teal-700",
-        }
-      if (value <= 36)
-        return {
-          label: "Fair",
-          variant: "default" as const,
-          className: "bg-yellow-100 text-yellow-700",
-        }
-      return { label: "Poor", variant: "destructive" as const, className: "" }
     }
   }
 
@@ -119,137 +69,113 @@ export function InvestmentPerformanceOutput({ results }: InvestmentPerformanceOu
   }
 
   return (
-    <Card className="overflow-hidden" id="performance-card">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
-            <TrendingUp className="h-4 w-4 text-blue-600" />
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5" />
+            Investment Performance Metrics
           </div>
-          <span className="text-lg font-semibold">Performance</span>
+          <Badge variant={results.roi > 10 ? "default" : "secondary"}>{formatPercent(results.roi)} ROI</Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-3 rounded-lg border bg-muted/30 p-4" id="cap-rate-metric">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Cap Rate</span>
-                <button
-                  onClick={() => toggleHelp("capRate")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Cap Rate information"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </div>
-              <Badge className={getPerformanceBadge(results.capRate, "rate").className}>
-                {getPerformanceBadge(results.capRate, "rate").label}
-              </Badge>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Cap Rate</span>
+              <button
+                onClick={() => toggleHelp("capRate")}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Toggle Cap Rate information"
+              >
+                <HelpCircle className="h-4 w-4" />
+              </button>
             </div>
-            <div className={`text-2xl font-bold ${getValueColor(results.capRate, "rate")}`}>
+            <div className={`text-lg font-semibold ${getValueColor(results.capRate, "rate")}`}>
               {formatPercent(results.capRate)}
             </div>
-            <p className="text-xs text-muted-foreground">NOI ÷ Property Value</p>
+            <div className="text-xs text-muted-foreground">NOI ÷ Property Value</div>
 
             {expandedHelp === "capRate" && (
-              <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                <strong>Cap Rate:</strong> {tooltipContent.capRate}
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+                <strong>Cap Rate Info:</strong> {tooltipContent.capRate}
               </div>
             )}
           </div>
 
-          <div className="space-y-3 rounded-lg border bg-muted/30 p-4" id="cash-on-cash-metric">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Cash-on-Cash Return</span>
-                <button
-                  onClick={() => toggleHelp("cashOnCash")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Cash-on-Cash Return information"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </div>
-              <Badge className={getPerformanceBadge(results.cashOnCashReturn, "rate").className}>
-                {getPerformanceBadge(results.cashOnCashReturn, "rate").label}
-              </Badge>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Cash-on-Cash Return</span>
+              <button
+                onClick={() => toggleHelp("cashOnCash")}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Toggle Cash-on-Cash Return information"
+              >
+                <HelpCircle className="h-4 w-4" />
+              </button>
             </div>
-            <div className={`text-2xl font-bold ${getValueColor(results.cashOnCashReturn, "rate")}`}>
+            <div className={`text-lg font-semibold ${getValueColor(results.cashOnCashReturn, "rate")}`}>
               {formatPercent(results.cashOnCashReturn)}
             </div>
-            <p className="text-xs text-muted-foreground">Annual return on invested capital</p>
+            <div className="text-xs text-muted-foreground">Annual return on invested capital</div>
 
             {expandedHelp === "cashOnCash" && (
-              <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                <strong>Cash-on-Cash Return:</strong> {tooltipContent.cashOnCash}
+              <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+                <strong>Cash-on-Cash Return Info:</strong> {tooltipContent.cashOnCash}
               </div>
             )}
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="space-y-3 rounded-lg border bg-muted/20 p-4" id="total-investment-metric">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Total Investment</span>
-                <button
-                  onClick={() => toggleHelp("totalInvestment")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Total Investment information"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-            <div className={`text-2xl font-bold ${getValueColor(results.totalCashInvested, "expense")}`}>
-              {formatCurrency(results.totalCashInvested)}
-            </div>
-            <p className="text-xs text-muted-foreground">Initial capital required</p>
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Total Investment</span>
+            <button
+              onClick={() => toggleHelp("totalInvestment")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Toggle Total Investment information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <div className={`text-lg font-semibold ${getValueColor(results.totalCashInvested, "expense")}`}>
+            {formatCurrency(results.totalCashInvested)}
+          </div>
+          <div className="text-xs text-muted-foreground">Initial capital required</div>
 
-            {expandedHelp === "totalInvestment" && (
-              <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                <strong>Total Investment:</strong> {tooltipContent.totalInvestment}
-              </div>
-            )}
+          {expandedHelp === "totalInvestment" && (
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+              <strong>Total Investment Info:</strong> {tooltipContent.totalInvestment}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Break-Even Timeline</span>
+            <button
+              onClick={() => toggleHelp("breakEven")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Toggle Break-Even Timeline information"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+          <div className={`text-lg font-semibold ${getValueColor(results.breakEvenMonths, "timeline")}`}>
+            {results.breakEvenMonths > 0 ? `${results.breakEvenMonths.toFixed(1)} months` : "Never"}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {results.breakEvenMonths > 0
+              ? `${(results.breakEvenMonths / 12).toFixed(1)} years to break even`
+              : "Negative cash flow"}
           </div>
 
-          <div className="space-y-3 rounded-lg border bg-muted/20 p-4" id="break-even-metric">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Break-Even Timeline</span>
-                <button
-                  onClick={() => toggleHelp("breakEven")}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Toggle Break-Even Timeline information"
-                >
-                  <HelpCircle className="h-3.5 w-3.5" />
-                </button>
-              </div>
-              {results.breakEvenMonths > 0 && (
-                <Badge className={getPerformanceBadge(results.breakEvenMonths, "timeline").className}>
-                  {getPerformanceBadge(results.breakEvenMonths, "timeline").label}
-                </Badge>
-              )}
+          {expandedHelp === "breakEven" && (
+            <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+              <strong>Break-Even Timeline Info:</strong> {tooltipContent.breakEven}
             </div>
-            <div className={`text-2xl font-bold ${getValueColor(results.breakEvenMonths, "timeline")}`}>
-              {results.breakEvenMonths > 0 ? `${results.breakEvenMonths.toFixed(1)} months` : "Never"}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {results.breakEvenMonths > 0
-                ? `${(results.breakEvenMonths / 12).toFixed(1)} years to break even`
-                : "Negative cash flow"}
-            </p>
-
-            {expandedHelp === "breakEven" && (
-              <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
-                <strong>Break-Even Timeline:</strong> {tooltipContent.breakEven}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </CardContent>
     </Card>
