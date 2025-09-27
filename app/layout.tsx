@@ -4,6 +4,8 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Suspense } from "react"
 
+// Initialize all fonts properly
+
 const geist = V0_Font_Geist({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
