@@ -110,9 +110,8 @@ export function TaxBenefitsSection({ data, onChange, isOpen, onToggle }: TaxBene
               </Select>
               {isHoursDescriptionOpen && (
                 <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-                  <strong>Material Participation Info:</strong> Material participation allows STR losses to offset other
-                  income. Requires 500+ hours annually OR 100+ hours with no one else participating more. Spouse hours
-                  count toward your total participation time.
+                  Material participation allows STR losses to offset other income. Requires 500+ hours annually OR 100+
+                  hours with no one else participating more. Spouse hours count toward your total participation time.
                 </div>
               )}
             </div>

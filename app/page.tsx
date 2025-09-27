@@ -116,10 +116,11 @@ export default function STRCalculator() {
     const cleaningFeeRevenue = bookingsPerMonth * data.cleaningFee
     const grossMonthlyRevenue = nightlyRevenue + cleaningFeeRevenue
     const monthlyPlatformFees = (grossMonthlyRevenue * data.platformFees) / 100
-    const monthlyRevenue = grossMonthlyRevenue - monthlyPlatformFees
-    const annualRevenue = monthlyRevenue * 12
 
-    const managementFeeAmount = (annualRevenue * data.managementFee) / 100
+    const revenueAfterPlatformFees = grossMonthlyRevenue - monthlyPlatformFees
+    const annualRevenueAfterPlatformFees = revenueAfterPlatformFees * 12
+
+    const managementFeeAmount = (annualRevenueAfterPlatformFees * data.managementFee) / 100
     const annualUtilities = data.utilities * 12
     const actualCleaningCosts = bookingsPerMonth * 12 * 75 // Assume $75 actual cost per cleaning
 
@@ -143,19 +144,31 @@ export default function STRCalculator() {
       loanAmount > 0 && monthlyInterestRate > 0
         ? (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
           (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1)
-        : 0
+        : loanAmount > 0 && monthlyInterestRate === 0
+          ? loanAmount / numberOfPayments // Handle 0% interest rate
+          : 0
 
     const annualMortgagePayments = monthlyMortgagePayment * 12
-    const netOperatingIncome = annualRevenue - totalAnnualOperatingCosts
+
+    const netOperatingIncome = grossMonthlyRevenue * 12 - totalAnnualOperatingCosts
+    const monthlyNetOperatingIncome = netOperatingIncome / 12
+
     const annualCashFlow = netOperatingIncome - annualMortgagePayments
+    const monthlyCashFlow = annualCashFlow / 12
 
     // Investment metrics
     const totalCashInvested = data.downPayment + data.closingCosts + data.renovation + data.furnishing
+
     const roi = totalCashInvested > 0 ? (annualCashFlow / totalCashInvested) * 100 : 0
     const cashOnCashReturn = totalCashInvested > 0 ? (annualCashFlow / totalCashInvested) * 100 : 0
     const capRate = data.purchasePrice > 0 ? (netOperatingIncome / data.purchasePrice) * 100 : 0
 
-    const breakEvenMonths = annualCashFlow > 0 ? totalCashInvested / (annualCashFlow / 12) : Number.POSITIVE_INFINITY
+    const breakEvenMonths =
+      annualCashFlow > 0 && totalCashInvested > 0
+        ? totalCashInvested / (annualCashFlow / 12)
+        : annualCashFlow <= 0
+          ? Number.POSITIVE_INFINITY
+          : 0
 
     const depreciationBasis = data.purchasePrice * 0.8 // 80% of purchase price (excluding land)
     const annualDepreciation = depreciationBasis / 27.5 // 27.5-year schedule for residential rental
@@ -194,11 +207,15 @@ export default function STRCalculator() {
       // Revenue metrics
       nightsBooked,
       bookingsPerMonth,
-      monthlyRevenue,
-      annualRevenue,
+      monthlyRevenue: revenueAfterPlatformFees, // Revenue after platform fees only
+      annualRevenue: annualRevenueAfterPlatformFees, // Revenue after platform fees only
       grossMonthlyRevenue,
       cleaningFeeRevenue,
       monthlyPlatformFees,
+      monthlyNetOperatingIncome, // Added this property that was missing
+      annualNetOperatingIncome: netOperatingIncome, // Added this property that was missing
+      monthlyCashFlow, // Net cash flow after all expenses including mortgage
+      annualCashFlow, // Net cash flow after all expenses including mortgage
 
       // Expense metrics
       totalAnnualOperatingCosts,
@@ -330,6 +347,10 @@ export default function STRCalculator() {
                 grossMonthlyRevenue: results.grossMonthlyRevenue,
                 cleaningFeeRevenue: results.cleaningFeeRevenue,
                 monthlyPlatformFees: results.monthlyPlatformFees,
+                monthlyNetOperatingIncome: results.monthlyNetOperatingIncome,
+                annualNetOperatingIncome: results.annualNetOperatingIncome,
+                monthlyCashFlow: results.monthlyCashFlow,
+                annualCashFlow: results.annualCashFlow,
               }}
               showYearly={showYearly}
               onToggleView={() => setShowYearly(!showYearly)}

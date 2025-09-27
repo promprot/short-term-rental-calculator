@@ -124,9 +124,8 @@ export function StartupSection({ data, onChange, isOpen, onToggle }: StartupSect
               </Select>
               {isLoanTermDescriptionOpen && (
                 <div className="rounded-lg border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
-                  <strong>Loan Term Info:</strong> 15-year loans have higher monthly payments but lower total interest.
-                  30-year loans improve cash flow but cost more over time. Choose based on your cash flow needs and
-                  investment strategy.
+                  15-year loans have higher monthly payments but lower total interest. 30-year loans improve cash flow
+                  but cost more over time. Choose based on your cash flow needs and investment strategy.
                 </div>
               )}
             </div>

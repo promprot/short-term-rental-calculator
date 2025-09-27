@@ -14,6 +14,10 @@ interface RevenuePerformanceOutputProps {
     grossMonthlyRevenue: number
     cleaningFeeRevenue: number
     monthlyPlatformFees: number
+    monthlyNetOperatingIncome: number
+    annualNetOperatingIncome: number
+    monthlyCashFlow: number
+    annualCashFlow: number
   }
   showYearly: boolean
   onToggleView: () => void
@@ -60,8 +64,8 @@ export function RevenuePerformanceOutput({ results, showYearly, onToggleView }: 
   const tooltipContent = {
     grossRevenue:
       "Gross Revenue is your total rental income before any expenses, calculated as nightly rate × occupancy rate × cleaning fees. This represents your maximum earning potential.",
-    netCashFlow:
-      "Net Revenue is your monthly profit after platform fees but before operating expenses. This shows your actual revenue after booking platform commissions.",
+    netRevenue:
+      "Net Revenue (NOI) is your Net Operating Income after ALL operating expenses including platform fees, cleaning costs, maintenance, insurance, taxes, utilities, and management fees, but BEFORE mortgage payments. This is the true profitability of your rental property operations.",
   }
 
   const toggleHelp = (field: string) => {
@@ -118,27 +122,27 @@ export function RevenuePerformanceOutput({ results, showYearly, onToggleView }: 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Net Revenue</span>
+                <span className="text-sm font-medium">Net Revenue (NOI)</span>
                 <button
-                  onClick={() => toggleHelp("netCashFlow")}
+                  onClick={() => toggleHelp("netRevenue")}
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Toggle Net Revenue information"
                 >
                   <HelpCircle className="h-3.5 w-3.5" />
                 </button>
               </div>
-              <Badge className={getRevenueBadge(results.monthlyRevenue, "net").className}>
-                {getRevenueBadge(results.monthlyRevenue, "net").label}
+              <Badge className={getRevenueBadge(results.monthlyNetOperatingIncome, "net").className}>
+                {getRevenueBadge(results.monthlyNetOperatingIncome, "net").label}
               </Badge>
             </div>
-            <div className={`text-2xl font-bold ${getRevenueColor(results.monthlyRevenue, "net")}`}>
-              {formatCurrency(showYearly ? results.annualRevenue : results.monthlyRevenue)}
+            <div className={`text-2xl font-bold ${getRevenueColor(results.monthlyNetOperatingIncome, "net")}`}>
+              {formatCurrency(showYearly ? results.annualNetOperatingIncome : results.monthlyNetOperatingIncome)}
             </div>
-            <p className="text-xs text-muted-foreground">Revenue after platform fees</p>
+            <p className="text-xs text-muted-foreground">Revenue after all operating expenses</p>
 
-            {expandedHelp === "netCashFlow" && (
+            {expandedHelp === "netRevenue" && (
               <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm text-primary">
-                <strong>Net Revenue:</strong> {tooltipContent.netCashFlow}
+                <strong>Net Revenue:</strong> {tooltipContent.netRevenue}
               </div>
             )}
           </div>
